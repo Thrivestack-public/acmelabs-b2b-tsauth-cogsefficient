@@ -1,0 +1,17 @@
+name : "sample-app-backend"
+version: "1.0.0"
+env: "DEV"
+server:
+  host: 127.0.0.1
+  port: 8080
+  timeout:
+    server: 300
+    read: 150
+    write: 100
+    idle: 500
+endpoint:
+  acknowledgeTenant: "https://api.dev.app.thrivestack.ai/thrivestackWebhook/acknowledgeTenant"
+lru:
+  maxCacheSize: 1000
+  ttlMs: 3600000
+ 
