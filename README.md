@@ -3,24 +3,29 @@ This is ACME Labs SaaS application using ThriveStack's B2B COGS efficient templa
 
 ## Getting Started
 
-## Set up
-In order to launch this app:
+## Goal
 
-#### 1. Clone the repo 
-```
-git clone https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient.git
-```
+The primary goal of the ThriveStack Sample App is to empower SaaS builders by providing a practical example they can simulate and run on their own systems. By exploring this sample app, SaaS developers can gain insights into the integration capabilities of ThriveStack.
 
-#### 2. Set up Descope environment variables in `.env` file
-```
-REACT_APP_DESCOPE_PROJECT_ID="YOUR PROJECT ID" // Required for Descope authentication
-REACT_APP_DESCOPE_SIGN_IN_FLOW_ID="sign-up-or-in" // Optional, if you would like to use a flow other than sign-up-or-in
-REACT_APP_DESCOPE_MANAGEMENT_KEY="YOUR MANAGEMENT KEY" // Optional, if you would like to run E2E tests
-DESCOPE_BASE_URL="http://localhost:8000" // Optional, if you would like to use a different base URL
-```
-_You can get your project-id [here](https://app.descope.com/settings/project)_.
-_You can get this flow-id from the Flows page [here](https://app.descope.com/flows)_.
+## Use Cases
 
+1. **SaaS Simulation and Testing:**
+   - **Objective:** SaaS builders can use the sample app to simulate real-world scenarios and test their integrations with ThriveStack.
+   - **How?** By following the setup instructions in this README, SaaS builders can deploy the sample app locally or on a test environment. They can then interact with the app, trigger events, and observe how ThriveStack integrates seamlessly.
+
+2. **Customer Understanding:**
+   - **Objective:** Customers who are considering ThriveStack can use the sample app to understand how it fits into their existing workflows.
+   - **How?** The sample app showcases various integration points with ThriveStack. Customers can explore these features, such as data synchronization, event handling, and authentication. By doing so, they gain a clearer understanding of how ThriveStack can enhance their own applications.
+
+## Getting Started
+
+Follow these steps to set up the ThriveStack Sample App:
+
+1. **Clone the Repository:**
+   - Clone this repository to your local machine using `git clone https://github.com/your-username/thrivestack-sample-app.git`.
+
+2. **Install Dependencies:**
+   - Navigate to the project directory and run `npm install` to install the necessary dependencies.
 
 #### 3. Install dependencies 
 
