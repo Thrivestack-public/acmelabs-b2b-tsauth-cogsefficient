@@ -89,7 +89,14 @@ func (h *WebhookHandler) HandleWebhook(c *gin.Context) {
 
 func (h *WebhookHandler) processEvent(event Event) {
 	h.Mu.Lock()
-	cache.Cache.Put(event.CreateAccountRequest.WorkflowRuntimeId, event)
+	switch event.EventType {
+
+	case "account_created":
+		cache.Cache.Put(event.CreateAccountRequest.WorkflowRuntimeId, event)
+	default:
+		cache.Cache.Put(event.JoinAccountRequest.WorkflowRuntimeId, event)
+	}
+
 	h.Mu.Unlock()
 
 	time.Sleep(2 * time.Second) // Simulate async processing
@@ -100,23 +107,40 @@ func (h *WebhookHandler) processEvent(event Event) {
 func (h *WebhookHandler) acknowledgeEvent(event Event) {
 	//url := "https://api.dev.app.thrivestack.ai/thrivestackWebhook/acknowledgeTenant" //h.Config.Endpoint.AcknowledgeTenant
 	var url string
+	var payload map[string]interface{}
 	if u, ok := os.LookupEnv("ACKNOWLEDGE_TENANT_URL"); ok {
 		url = u
 	}
+
 	mgmtToken, err := token.GetThriveStackToken()
 	if err != nil {
 		fmt.Println("Error fetching ThriveStack token:", err)
 		return
 	}
-	payload := map[string]interface{}{
-		"eventType": event.EventType,
-		"createAccountResponse": map[string]string{
-			"workflowDesignTimeId": event.CreateAccountRequest.WorkflowDesignTimeId,
-			"workflowRuntimeId":    event.CreateAccountRequest.WorkflowRuntimeId,
-			"accountId":            uuid.NewString(),
-			"accountName":          event.CreateAccountRequest.AccountName,
-			"userEmailId":          event.CreateAccountRequest.UserEmailId,
-		},
+
+	switch event.EventType {
+
+	case "account_created":
+		payload = map[string]interface{}{
+			"eventType": event.EventType,
+			"createAccountResponse": map[string]interface{}{
+				"workflowDesignTimeId": event.CreateAccountRequest.WorkflowDesignTimeId,
+				"workflowRuntimeId":    event.CreateAccountRequest.WorkflowRuntimeId,
+				"accountId":            uuid.NewString(),
+				"accountName":          event.CreateAccountRequest.AccountName,
+				"userEmailId":          event.CreateAccountRequest.UserEmailId,
+			},
+		}
+	default:
+		payload = map[string]interface{}{
+			"eventType": event.EventType,
+			"joinAccountResponse": map[string]interface{}{
+				"workflowDesignTimeId": event.JoinAccountRequest.WorkflowDesignTimeId,
+				"workflowRuntimeId":    event.JoinAccountRequest.WorkflowRuntimeId,
+				"userEmailId":          event.JoinAccountRequest.UserEmailId,
+				"accountIds":           event.JoinAccountRequest.AccountIds,
+			},
+		}
 	}
 
 	jsonPayload, err := json.Marshal(payload)
@@ -143,6 +167,6 @@ func (h *WebhookHandler) acknowledgeEvent(event Event) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		log.Printf("Received non-200 response: %d", resp.StatusCode)
+		log.Printf("Received non-200 response: %s", resp.Body)
 	}
 }
