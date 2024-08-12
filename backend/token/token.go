@@ -26,11 +26,10 @@ func GetThriveStackToken() (string, error) {
 	if tURL, ok := os.LookupEnv("TS_TOKEN_URL"); ok {
 		token_URL = tURL
 	}
-
 	if kId, ok := os.LookupEnv("ACME_LABS_PRIVATE_KEY_ID"); ok {
 		acme_labs_pvt_key_id = kId
 	}
-	//url := "https://api.dev.app.thrivestack.ai/api/token"
+
 	acme_labs_pvt_key = "" //Provide actual private key here
 	requestBody, err := json.Marshal(TokenRequest{
 		KeyID:      acme_labs_pvt_key_id,
