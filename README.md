@@ -56,4 +56,4 @@ To use it, go to your [project configuration](https://app.descope.com/settings/p
 To learn more please see the [Descope Documentation and API reference page](https://docs.descope.com/).
 
 ## Contact Us
-If you need help you can [contact us](https://docs.descope.com/support/)
+If you need help you can [contact us]
