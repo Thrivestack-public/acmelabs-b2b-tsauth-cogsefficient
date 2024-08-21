@@ -1,0 +1,15 @@
+.mainGrid-body{
+    height: 100%;
+     padding-top:2vh;
+}
+.leftGrid-body {
+    display: flex;
+    padding-top: 12vh;
+    padding-left: 1vw;
+    background-color: #e2e8f040
+}
+.rightGrid-body{
+    background-color: white;
+    display: flex;
+    justify-content: start;
+}
