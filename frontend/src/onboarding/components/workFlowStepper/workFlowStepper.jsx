@@ -21,7 +21,7 @@ function workFlowStepper(props) {
 
   const location = useLocation();
   const currentPath = location.pathname;
-  const isFinalPage = currentPath.endsWith("/finall");
+  const isFinalPage = currentPath.endsWith("/final");
   const queryParams = new URLSearchParams(location.search);
   const workflowRuntimeId = queryParams.get('runtimeId');
   const authOTP = queryParams.get('authOTP'); 
@@ -232,15 +232,15 @@ function workFlowStepper(props) {
             <CardContent>
 
               <Box sx={{ maxWidth: 400 }}>
-                <Stepper activeStep={stepCompleted} orientation="vertical">
+                <Stepper orientation="vertical">
                   {steps.map((step, index) => (
                     <>
-                      <Step key={step.label} sx={{ color: 'green' }} index={index == 5 ? 0 : index}>
+                      <Step key={step.label} sx={{ color: 'green' }} index={index > 4 ? index - 5 : index}
+                      completed={index < stepCompleted} active={index === activeStep}>
                         <StepLabel
                           StepIconProps={{
                             classes: {
                               root: 'StepperIcon',
-                              active: 'StepperIconActive',
                               completed: 'StepperIconCompleted',
                             }
                           }}
@@ -256,7 +256,7 @@ function workFlowStepper(props) {
                           </ArcherElement>
                         </StepLabel>
                       </Step>
-                      {index == 4 && <div style={{ height: '115px' }}>
+                      {index == 4 && <div style={{ height: '107px' }}>
                         <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
                       </div>}
                     </>
@@ -274,12 +274,11 @@ function workFlowStepper(props) {
                         StepIconProps={{
                           classes: {
                             root: 'StepperIcon',
-                            active: 'StepperIconActive',
                             completed: 'StepperIconCompleted',
                           }
                         }}
                       >
-                        <span style={{ color: isFinalPage ? 'blue' : 'black' }} className="stepper-link" >Notify end users</span>
+                        <span style={{ color: isFinalPage ? 'blue' : '#00000099' , fontWeight: 400,fontSize: '0.875rem'}} className="stepper-link" >Notify end users</span>
                         <img src="/Vector.png" className='infoImageIcon'>
                         </img>
                         <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
@@ -301,7 +300,6 @@ function workFlowStepper(props) {
                         StepIconProps={{
                           classes: {
                             root: 'StepperIcon',
-                            active: 'StepperIconActive',
                             completed: 'StepperIconCompleted',
                           }
                         }}
@@ -309,7 +307,7 @@ function workFlowStepper(props) {
                         index={0}
                         onClick={() => { setIsPrevModalOpen(true) }}
                       >
-                        <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : 'black' }}>Notify Acme GTM team</span>
+                        <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : '#00000099', fontWeight: 400,fontSize: '0.875rem' }}>Notify Acme GTM team</span>
                         <img src="/Vector.png" className='infoImageIcon'>
                         </img>
                         <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
@@ -329,7 +327,6 @@ function workFlowStepper(props) {
                         StepIconProps={{
                           classes: {
                             root: 'StepperIcon',
-                            active: 'StepperIconActive',
                             completed: 'StepperIconCompleted',
                           }
                         }}
