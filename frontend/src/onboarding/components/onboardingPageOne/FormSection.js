@@ -130,9 +130,12 @@ function FormSection(props) {
                 paddingTop={"0vh"}
                 fontSize={["12px", "14px", "x-large"]}
               >
-                {textConstants.ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE}
+                {textConstants.ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE}<br />
               </Typography>
-           
+           <Typography>
+           <span style={{color:'#FF26DC'}}>End user</span> {textConstants.ONBOARDING_PAGE_ONE_STEP_SUB_TITLE} <span style={{color:'#FF26DC'}}>indicative</span> {textConstants.ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2}
+           <span style={{color:'#FF26DC'}}>indicative</span> your onboarding experience.
+           </Typography>
               <Card
                 className={classes.card}
                 data-aos-delay="200"
@@ -149,7 +152,7 @@ function FormSection(props) {
                   marginBottom={"16px"}
                   padding={"0px 16px"}
                 >
-                  {textConstants.ONBOARDING_PAGE_ONE_STEP_ONE_HEADING}
+                  {textConstants.ONBOARDING_PAGE_ONE_STEP_ONE_HEADING} <span style={{fontWeight: 500 , fontSize:'medium'}}>ThriveStack PLG Analytics &gt; Activation reports.</span>
                 </Typography>
                 <Box mt={4} />
                 <OrganizationOnboardingForm />

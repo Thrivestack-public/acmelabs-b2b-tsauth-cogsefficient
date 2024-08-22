@@ -10,12 +10,16 @@ import { Card, CardContent } from '@mui/material';
 import { textConstants } from "../../../textConstants";
 import { Grid } from '@mui/material';
 import { ArcherContainer, ArcherElement } from "react-archer";
+import {jwtDecode} from 'jwt-decode'; 
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import JsonViewerModal from './modalComponent';
 import PreviewModal from './previewModalComponent';
 import { fetchData, fetchValidateAuth } from '../../../Api/viewSharedData';
 import { useLocation } from 'react-router-dom';
 import './workFlowStepper.css';
+import validateAuthOTPData from '../../../Api/validateAuthOTPData'
+
+
 
 function workFlowStepper(props) {
 
@@ -25,6 +29,12 @@ function workFlowStepper(props) {
   const queryParams = new URLSearchParams(location.search);
   const workflowRuntimeId = queryParams.get('runtimeId');
   const authOTP = queryParams.get('authOTP'); 
+console.log("workflowRuntimeId", workflowRuntimeId);
+
+  if(workflowRuntimeId && workflowRuntimeId!==""){
+    localStorage.setItem("workflowRuntimeId",workflowRuntimeId)
+  }
+
   const { pageStepCounter, stepCompleted, setCurrentPage, setPageStepCounter, setStepCompleted } = useOnboardingFormData();
   if (isFinalPage) {
     setCurrentPage(3);
@@ -182,10 +192,27 @@ function workFlowStepper(props) {
   const closeModal = () => setIsModalOpen(false);
   const [isPrevModalOpen, setIsPrevModalOpen] = useState(false);
   const closePrevModel = () => setIsPrevModalOpen(false);
+  const [modalInfo , setModalInfo] = useState(true);
+
+  useEffect(async () => {
+    if(stepId ==="tenant_creation"){
+      const wrId = localStorage.getItem("workflowRuntimeId") || ""
+      const apiResponse = await fetchData(wrId, stepId);
+      setViewSharedDataJson(apiResponse);
+    }
+    if(stepId && stepId!=="" &&stepId !=="tenant_creation" && authOTP ){
+      const validateOTP = await validateAuthOTPData(authOTP || "")
+      const decoded = jwtDecode(validateOTP.token);
+      console.log("decoded token",decoded)
+      localStorage.setItem("productId",decoded.tenantId)
+      setViewSharedDataJson(decoded);
+    }
+  }, [stepId,authOTP]);
 
   async function getTenantData() {
     setModalJsonData(baseJsonData)
     setModalJsonLabel("Tenant Data");
+    setModalInfo(true);
     setIsModalOpen(true);
     const apiResponse = await fetchData(workflowRuntimeId, 'tenant_creation');
     console.log("tenantData", apiResponse);
@@ -196,6 +223,7 @@ function workFlowStepper(props) {
   async function getAuthenticationData() {
     setModalJsonData(baseJsonData)
     setModalJsonLabel("Authenticated User Data");
+    setModalInfo(false)
     setIsModalOpen(true);
     const apiResponse = await fetchValidateAuth(authOTP);
     console.log("authenticationData", apiResponse);
@@ -204,7 +232,7 @@ function workFlowStepper(props) {
 
   return (
     <ArcherContainer strokeColor="#ccc" strokeWidth={1} svgContainerStyle={{ zIndex: 1 }}>
-      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalJsonData} tabLabel={modalJsonLabel} />
+      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalJsonData} tabLabel={modalJsonLabel} info ={modalInfo}/>
 
       <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '2vh', paddingLeft: '1.5vw' }}>
 

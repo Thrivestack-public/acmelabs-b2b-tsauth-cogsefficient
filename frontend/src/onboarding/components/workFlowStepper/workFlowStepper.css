@@ -26,7 +26,7 @@
 
 .arrow-box {
     background-color: #ffed8052;
-    border: 4px solid #DFBD67;
+    border: 4px solid #0E3EE9;
     border-radius: 12px;
 }
 
@@ -48,7 +48,8 @@
     transform: translateY(-50%);
     border-width: 16px;
     border-style: solid;
-    border-color: transparent transparent transparent #DFBD67;
+    border-color: transparent transparent transparent #0E3EE9
+    ;
     /* Change last color to match background */
 }
 

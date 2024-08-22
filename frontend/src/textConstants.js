@@ -6,8 +6,10 @@ export const textConstants = {
     "Behind the scene ThriveStack has already completed the following steps -",
 
   ONBOARDING_PAGE_ONE_STEP_ONE_HEADING:
-    "It's a multi-step onboarding process. If a user drops off during this process, ThriveStack will work behind the scenes to capture the drop-off, enabling you to understand why users may not be able to complete it.",
+    "Here’s a simulation of your app’s onboarding steps, showcasing a multi-step process. With self-serve telemetry, your app can log events for each step (e.g., started, completed), enabling your Growth teams to track success and drop-offs using",
   ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE: "SaaS Application Onboarding Page",
+  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE: "will be navigated to Onboarding after ThriveStack completes the steps as listed in the left pane. This page is an",
+  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2:" indicative page of self-serve onboarding within your product. ThriveStack needs a page URL to redirect to. This page will receive data that can be used to ",
   ONBOARDING_PAGE_TWO_TITLE: "Acme Labs Onboarding For End-user",
   ONBOARDING_PAGE_TWO_DESCRIPTION_ONE:
     "Imagine this page as your product's onboarding page, which your end-users see once their authentication is completed. Typically, you want your end-users to fill out the onboarding form, as shown below. You can enable this by simply configuring the onboarding page URL in Thrivestack's Workflow builder (Signup Workflow).",
@@ -35,7 +37,7 @@ export const textConstants = {
   CONCLUSION_PAGE_VERIFY_DESC: "Thrivestack and Acme Labs self serve integration is complete",
   CONCLUSION_PAGE_VERIFY_DESC_TWO: "Checkout the Github repository for the entire code base here:",
   CONCLUSION_PAGE_VERIFY_INFO : "New User Signup Notifications have been sent out",
-  CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE: "Welcome email notification sent to the singed up en- user on",
+  CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE: "Welcome email notification sent to the signed up end-user on",
   CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO: "Notification to ACME’s GTM sent to ",
   CONCLUSION_PAGE_CARD_TEXT: "Checkout data available for Analytics and Drive on Thrivestack",
   CONCLUSION_PAGE_CARD_TEXT_ONE:"Sign up or log in with your sample app ID on Thrivestack",

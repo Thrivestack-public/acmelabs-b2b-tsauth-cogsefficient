@@ -115,3 +115,16 @@
   bottom: 0;
   background-color: white; /* Ensure footer is on top of scrollbar */
 }
+.modal-info-footer{
+  display: flex;
+  
+  align-items: center;
+  padding: 10px 20px;
+  color: gray;
+  font-size: smaller;
+}
+.link{
+  font-weight: 400;
+    font-size: 16px;
+    color: blue;
+}
