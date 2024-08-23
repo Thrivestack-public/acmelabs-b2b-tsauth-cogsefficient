@@ -3,7 +3,7 @@ import {sharedDataApiBase, sharedDataApiEndpoint, validateAuthApiBase, validateA
 
 // Function to fetch data using Axios
 async function fetchData(workflowRuntimeId, stepId) {
-    const url = `${sharedDataApiBase}/${sharedDataApiEndpoint}?workflowRuntimeId=${workflowRuntimeId}&stepId=${stepId}`;
+    const url = `${sharedDataApiBase}${sharedDataApiEndpoint}?workflowRuntimeId=${workflowRuntimeId}&stepId=${stepId}`;
 
     try {
         const response = await axios.get(url);

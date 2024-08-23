@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import './conclusion.css';
 import { Box, Card, Grid, Button } from '@mui/material';
 import { ArcherContainer, ArcherElement } from "react-archer";
@@ -7,6 +8,8 @@ import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import { useHistory } from 'react-router-dom';
 function conclusion() {
+
+    const { userEmail } = useOnboardingFormData();
     const { width, height } = useWindowSize();
     const history = useHistory();
     const handleSignUp = () => {
@@ -82,7 +85,7 @@ function conclusion() {
 
                 <span className='conclusion-li-heading'>{textConstants.CONCLUSION_PAGE_VERIFY_INFO}:</span>
                 <ol type='number' style={{ paddingInlineStart: '15px', fontSize: "16px" }}>
-                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE} <span style={{ fontWeight: '500', fontSize: "16px" }}>&lt;end-user@YourCustomer.com&gt;</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>how to customize it.</li>
+                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE} <span style={{ fontWeight: '500', fontSize: "16px" }}>&lt;{userEmail}&gt;</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>how to customize it.</li>
                     <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO} <span style={{ fontWeight: '500', fontSize: "16px" }}>&lt;GTM@acmelabs.com&gt;.</span><span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>  on how to configure it.</li>
                 </ol>
                 <Card style={{ paddingLeft: '28px' }}>

@@ -33,6 +33,7 @@ export const OnboardingFormDataContextProvider = ({ children }) => {
   const [runtimeId, setRuntimeId] = useState("");
   const [workflowId, setWorkflowId] = useState("");
   const [returnUrl, setReturnUrl] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   return (
     <onboardingFormDataContext.Provider
       value={{
@@ -53,6 +54,8 @@ export const OnboardingFormDataContextProvider = ({ children }) => {
         setWorkflowId,
         returnUrl,
         setReturnUrl,
+        userEmail,
+        setUserEmail,
       }}
     >
       {children}

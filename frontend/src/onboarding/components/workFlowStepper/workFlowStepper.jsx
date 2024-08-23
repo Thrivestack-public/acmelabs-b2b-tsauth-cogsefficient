@@ -14,7 +14,7 @@ import {jwtDecode} from 'jwt-decode';
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import JsonViewerModal from './modalComponent';
 import PreviewModal from './previewModalComponent';
-import { fetchData, fetchValidateAuth } from '../../../Api/viewSharedData';
+import { fetchData as fetchTenantData, fetchValidateAuth } from '../../../Api/viewSharedData';
 import { useLocation } from 'react-router-dom';
 import './workFlowStepper.css';
 import validateAuthOTPData from '../../../Api/validateAuthOTPData'
@@ -22,20 +22,21 @@ import validateAuthOTPData from '../../../Api/validateAuthOTPData'
 
 
 function workFlowStepper(props) {
-
+  const stepId ="";
   const location = useLocation();
   const currentPath = location.pathname;
+  const isFirstPage = currentPath.endsWith("/tell-us-about-you");
   const isFinalPage = currentPath.endsWith("/final");
   const queryParams = new URLSearchParams(location.search);
-  const workflowRuntimeId = queryParams.get('runtimeId');
+  const workflowRuntimeId = queryParams.get('runtimeId') || localStorage.getItem("workflowRuntimeId");
   const authOTP = queryParams.get('authOTP'); 
-console.log("workflowRuntimeId", workflowRuntimeId);
-
+  console.log("workflowRuntimeId", workflowRuntimeId);
+  
   if(workflowRuntimeId && workflowRuntimeId!==""){
-    localStorage.setItem("workflowRuntimeId",workflowRuntimeId)
+    localStorage.setItem("workflowRuntimeId", workflowRuntimeId)
   }
 
-  const { pageStepCounter, stepCompleted, setCurrentPage, setPageStepCounter, setStepCompleted } = useOnboardingFormData();
+  const { pageStepCounter, stepCompleted, setCurrentPage, setPageStepCounter, setStepCompleted , setUserEmail} = useOnboardingFormData();
   if (isFinalPage) {
     setCurrentPage(3);
     setStepCompleted(11);
@@ -86,8 +87,9 @@ console.log("workflowRuntimeId", workflowRuntimeId);
   var lStepIndex = steps.length - 1;
 
   // labels of arrow
-  const viewSharedData = (updateJsonData, leftDistance) => (
+  const viewSharedData = (updateJsonData, leftDistance, activeOnStep) => (
     <div
+    className={stepCompleted < activeOnStep ? 'disabled' : ''}
       style={{
         color: "blue",
         fontSize: "12px",
@@ -96,10 +98,10 @@ console.log("workflowRuntimeId", workflowRuntimeId);
         textDecoration: 'underline',
         textAlign: "center",
         width: "9em",
-        cursor: 'pointer',
+        cursor: stepCompleted < activeOnStep ? 'not-allowed' : 'pointer',
         left: `${leftDistance}%`,
       }}
-      onClick={updateJsonData}
+      onClick={ stepCompleted < activeOnStep ? null : updateJsonData}
     >
       View Shared Data
     </div>
@@ -154,17 +156,17 @@ console.log("workflowRuntimeId", workflowRuntimeId);
     'srcLeftStep3': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep1',
-      label: viewSharedData(getAuthenticationData, 30)
+      label: viewSharedData(() => getAuthenticationData("firstAuthenticationData"), 30, 3)
     },
     'srcLeftStep5': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep3',
-      label: viewSharedData(getTenantData, 15)
+      label: viewSharedData(getTenantData, 15, 5),
     },
     'srcLeftStep10': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep4',
-      label: <div>{viewSharedData(getAuthenticationData, 65)} {redirectData}</div>
+      label: <div>{viewSharedData(() => getAuthenticationData("lastAuthenticationData"), 65, 10)} {redirectData}</div>
     }
   }
 
@@ -193,39 +195,46 @@ console.log("workflowRuntimeId", workflowRuntimeId);
   const [isPrevModalOpen, setIsPrevModalOpen] = useState(false);
   const closePrevModel = () => setIsPrevModalOpen(false);
   const [modalInfo , setModalInfo] = useState(true);
+  const [ViewSharedDataJson, setViewSharedDataJson] = useState({});
 
   useEffect(async () => {
-    if(stepId ==="tenant_creation"){
-      const wrId = localStorage.getItem("workflowRuntimeId") || ""
-      const apiResponse = await fetchData(wrId, stepId);
-      setViewSharedDataJson(apiResponse);
+    if(isFirstPage){
+      const authApiResponse = await fetchValidateAuth(authOTP);
+      const authApiResponseJson = jwtDecode(authApiResponse.token);
+      localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
     }
-    if(stepId && stepId!=="" &&stepId !=="tenant_creation" && authOTP ){
-      const validateOTP = await validateAuthOTPData(authOTP || "")
-      const decoded = jwtDecode(validateOTP.token);
-      console.log("decoded token",decoded)
-      localStorage.setItem("productId",decoded.tenantId)
-      setViewSharedDataJson(decoded);
+    if (isFinalPage){
+      const authApiResponse = await fetchValidateAuth(authOTP);
+      const authApiResponseJson = jwtDecode(authApiResponse.token);
+      const emailId = authApiResponseJson.emailId;
+      setUserEmail(emailId);
+      localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
     }
-  }, [stepId,authOTP]);
+
+  }, []);
+
+  useEffect(async () => {
+    const tenantApiResponse = await fetchTenantData(workflowRuntimeId, 'tenant_creation');
+    localStorage.setItem("tenantData", JSON.stringify(tenantApiResponse));
+  }, []);
 
   async function getTenantData() {
     setModalJsonData(baseJsonData)
     setModalJsonLabel("Tenant Data");
     setModalInfo(true);
     setIsModalOpen(true);
-    const apiResponse = await fetchData(workflowRuntimeId, 'tenant_creation');
+    const apiResponse = JSON.parse(localStorage.getItem("tenantData"));
     console.log("tenantData", apiResponse);
     setModalJsonData(apiResponse);
   }
 
   // validateAuth
-  async function getAuthenticationData() {
+  async function getAuthenticationData(storageKey) {
     setModalJsonData(baseJsonData)
     setModalJsonLabel("Authenticated User Data");
     setModalInfo(false)
     setIsModalOpen(true);
-    const apiResponse = await fetchValidateAuth(authOTP);
+    const apiResponse = JSON.parse(localStorage.getItem(storageKey));
     console.log("authenticationData", apiResponse);
     setModalJsonData(apiResponse);
   }
