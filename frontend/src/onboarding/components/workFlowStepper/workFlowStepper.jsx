@@ -10,33 +10,31 @@ import { Card, CardContent } from '@mui/material';
 import { textConstants } from "../../../textConstants";
 import { Grid } from '@mui/material';
 import { ArcherContainer, ArcherElement } from "react-archer";
-import {jwtDecode} from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import JsonViewerModal from './modalComponent';
 import PreviewModal from './previewModalComponent';
 import { fetchData as fetchTenantData, fetchValidateAuth } from '../../../Api/viewSharedData';
 import { useLocation } from 'react-router-dom';
 import './workFlowStepper.css';
-import validateAuthOTPData from '../../../Api/validateAuthOTPData'
-
 
 
 function workFlowStepper(props) {
-  const stepId ="";
+  const stepId = "";
   const location = useLocation();
   const currentPath = location.pathname;
   const isFirstPage = currentPath.endsWith("/tell-us-about-you");
   const isFinalPage = currentPath.endsWith("/final");
   const queryParams = new URLSearchParams(location.search);
   const workflowRuntimeId = queryParams.get('runtimeId') || localStorage.getItem("workflowRuntimeId");
-  const authOTP = queryParams.get('authOTP'); 
+  const authOTP = queryParams.get('authOTP');
   console.log("workflowRuntimeId", workflowRuntimeId);
-  
-  if(workflowRuntimeId && workflowRuntimeId!==""){
+
+  if (workflowRuntimeId && workflowRuntimeId !== "") {
     localStorage.setItem("workflowRuntimeId", workflowRuntimeId)
   }
 
-  const { pageStepCounter, stepCompleted, setCurrentPage, setPageStepCounter, setStepCompleted , setUserEmail} = useOnboardingFormData();
+  const { pageStepCounter, stepCompleted, setCurrentPage, setPageStepCounter, setStepCompleted, setUserEmail } = useOnboardingFormData();
   if (isFinalPage) {
     setCurrentPage(3);
     setStepCompleted(11);
@@ -89,7 +87,7 @@ function workFlowStepper(props) {
   // labels of arrow
   const viewSharedData = (updateJsonData, leftDistance, activeOnStep) => (
     <div
-    className={stepCompleted < activeOnStep ? 'disabled' : ''}
+      className={stepCompleted < activeOnStep ? 'disabled' : ''}
       style={{
         color: "blue",
         fontSize: "12px",
@@ -101,7 +99,7 @@ function workFlowStepper(props) {
         cursor: stepCompleted < activeOnStep ? 'not-allowed' : 'pointer',
         left: `${leftDistance}%`,
       }}
-      onClick={ stepCompleted < activeOnStep ? null : updateJsonData}
+      onClick={stepCompleted < activeOnStep ? null : updateJsonData}
     >
       View Shared Data
     </div>
@@ -174,12 +172,12 @@ function workFlowStepper(props) {
     'srcRightStep2': {
       ...rightToLeftArrowRelation,
       targetId: 'dstLeftStep3',
-      label: <div><div style={{display: 'inline-block', width: '100%'}}> </div> {acknowledgeData}</div>
+      label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
     },
     'srcRightStep3': {
       ...rightToLeftArrowRelation,
       targetId: 'dstLeftStep5',
-      label: <div><div style={{display: 'inline-block', width: '100%'}}> </div> {acknowledgeData}</div>
+      label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
     },
   }
 
@@ -194,18 +192,17 @@ function workFlowStepper(props) {
   const closeModal = () => setIsModalOpen(false);
   const [isPrevModalOpen, setIsPrevModalOpen] = useState(false);
   const closePrevModel = () => setIsPrevModalOpen(false);
-  const [modalInfo , setModalInfo] = useState(true);
-  const [ViewSharedDataJson, setViewSharedDataJson] = useState({});
+  const [modalInfo, setModalInfo] = useState(true);
 
   useEffect(async () => {
-    if(isFirstPage){
+    if (isFirstPage) {
       const authApiResponse = await fetchValidateAuth(authOTP);
-      const authApiResponseJson = jwtDecode(authApiResponse.token);
+      const authApiResponseJson = authApiResponse.token?jwtDecode(authApiResponse.token):{"error": "No token found"};
       localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
     }
-    if (isFinalPage){
+    if (isFinalPage) {
       const authApiResponse = await fetchValidateAuth(authOTP);
-      const authApiResponseJson = jwtDecode(authApiResponse.token);
+      const authApiResponseJson = authApiResponse.token?jwtDecode(authApiResponse.token):{"error": "No token found"};
       const emailId = authApiResponseJson.emailId;
       setUserEmail(emailId);
       localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
@@ -241,7 +238,7 @@ function workFlowStepper(props) {
 
   return (
     <ArcherContainer strokeColor="#ccc" strokeWidth={1} svgContainerStyle={{ zIndex: 1 }}>
-      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalJsonData} tabLabel={modalJsonLabel} info ={modalInfo}/>
+      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalJsonData} tabLabel={modalJsonLabel} info={modalInfo} />
 
       <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '2vh', paddingLeft: '1.5vw' }}>
 
@@ -273,7 +270,7 @@ function workFlowStepper(props) {
                   {steps.map((step, index) => (
                     <>
                       <Step key={step.label} sx={{ color: 'green' }} index={index > 4 ? index - 5 : index}
-                      completed={index < stepCompleted} active={index === activeStep}>
+                        completed={index < stepCompleted} active={index === activeStep}>
                         <StepLabel
                           StepIconProps={{
                             classes: {
@@ -315,7 +312,7 @@ function workFlowStepper(props) {
                           }
                         }}
                       >
-                        <span style={{ color: isFinalPage ? 'blue' : '#00000099' , fontWeight: 400,fontSize: '0.875rem'}} className="stepper-link" >Notify end users</span>
+                        <span style={{ color: isFinalPage ? 'blue' : '#00000099', fontWeight: 400, fontSize: '0.875rem' }} className="stepper-link" >Notify end users</span>
                         <img src="/Vector.png" className='infoImageIcon'>
                         </img>
                         <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
@@ -344,7 +341,7 @@ function workFlowStepper(props) {
                         index={0}
                         onClick={() => { setIsPrevModalOpen(true) }}
                       >
-                        <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : '#00000099', fontWeight: 400,fontSize: '0.875rem' }}>Notify Acme GTM team</span>
+                        <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : '#00000099', fontWeight: 400, fontSize: '0.875rem' }}>Notify Acme GTM team</span>
                         <img src="/Vector.png" className='infoImageIcon'>
                         </img>
                         <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
@@ -383,7 +380,7 @@ function workFlowStepper(props) {
                     <Step completed={isFinalPage}>
                       <StepLabel
                         icon={
-                          <img src={isFinalPage?'/unlock.png':'/lock.png'} style={{ marginLeft: '7px', fontSize:'small', height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img>
+                          <img src={isFinalPage ? '/unlock.png' : '/lock.png'} style={{ marginLeft: '7px', fontSize: 'small', height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img>
                         }
                         completed={true}
                         index={0}
