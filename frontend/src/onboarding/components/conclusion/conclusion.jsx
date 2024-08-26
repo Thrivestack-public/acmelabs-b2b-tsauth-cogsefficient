@@ -79,7 +79,7 @@ function conclusion() {
                 </ArcherContainer>
                 <span className='card-header'>Congratulations!</span> <br />
                 <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC}</span> <br />
-                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}</span><span fontSize={"x-small"}> {``}<a href="https://example.com">Github repo</a>{``}</span>
+                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}</span><span fontSize={"x-small"}> {``}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient">Github repo</a>{``}</span>
             </Box>
             <div className='div-font' style={{ paddingLeft: '6%' }}>
 
@@ -106,10 +106,11 @@ function conclusion() {
                                 variant="contained"
                                 color="primary"
                                 style={{ width: '50%', marginLeft: '20px', marginTop: '30px' }}
-                                onClick={handleSignUp}
+                                onClick={() => window.open('https://app.thrivestack.ai', '_blank')}
                             >
                                 SignUp
                             </Button>
+
                         </Grid>
                     </Grid>
                 </Card>

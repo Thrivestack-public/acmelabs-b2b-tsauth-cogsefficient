@@ -9,7 +9,7 @@ export const textConstants = {
     "Here’s a simulation of your app’s onboarding steps, showcasing a multi-step process. With self-serve telemetry, your app can log events for each step (e.g., started, completed), enabling your Growth teams to track success and drop-offs using",
   ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE: "SaaS Application Onboarding Page",
   ONBOARDING_PAGE_ONE_STEP_SUB_TITLE: "will be navigated to Onboarding after ThriveStack completes the steps as listed in the left pane. This page is an",
-  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2:" indicative page of self-serve onboarding within your product. ThriveStack needs a page URL to redirect to. This page will receive data that can be used to ",
+  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2:"page of self-serve onboarding within your product. ThriveStack needs a page URL to redirect to. This page will receive data that can be used to ",
   ONBOARDING_PAGE_TWO_TITLE: "Acme Labs Onboarding For End-user",
   ONBOARDING_PAGE_TWO_DESCRIPTION_ONE:
     "Imagine this page as your product's onboarding page, which your end-users see once their authentication is completed. Typically, you want your end-users to fill out the onboarding form, as shown below. You can enable this by simply configuring the onboarding page URL in Thrivestack's Workflow builder (Signup Workflow).",
