@@ -30,7 +30,7 @@ func GetThriveStackToken() (string, error) {
 		acme_labs_pvt_key_id = kId
 	}
 
-	acme_labs_pvt_key = "" //Provide actual private key here
+	acme_labs_pvt_key = "" //Provide actual private key here from secret manager or key vault
 	requestBody, err := json.Marshal(TokenRequest{
 		KeyID:      acme_labs_pvt_key_id,
 		PrivateKey: acme_labs_pvt_key,

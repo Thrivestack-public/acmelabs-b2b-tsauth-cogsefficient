@@ -1,0 +1,149 @@
+.StepperIcon {
+    font-size: small;
+    margin-left: 7px;
+    color: white !important;
+    border: 1px lightgray solid !important;
+    border-radius: 100%;
+}
+
+.StepperIconCompleted {
+    color: green !important;
+    border: 0px !important;
+}
+
+.StepperIconActive {
+    color: white !important;
+    border: 3px lightgray solid !important;
+}
+
+
+.default-box {
+    position: relative;
+    margin: 0 10px;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+.arrow-box {
+    background-color: #ffed8052;
+    border: 4px solid #0E3EE9;
+    border-radius: 12px;
+}
+
+.info-box{
+    height: 40px;
+    /* height: 50px; */
+    text-align: center;
+    font-size: 13px;
+    padding-top: 8px;
+    margin: 0 10px;
+}
+
+.arrow-box::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -33px;
+    /* Adjust the arrow position */
+    transform: translateY(-50%);
+    border-width: 16px;
+    border-style: solid;
+    border-color: transparent transparent transparent #0E3EE9
+    ;
+    /* Change last color to match background */
+}
+
+.arrow-box-step {
+    padding: 0;
+    margin-right: 0;
+    /* Adjust as needed */
+    margin-left: 30px;
+}
+
+.additional-style {
+    content: '';
+    position: absolute;
+    top: 90%;
+    right: -33px;
+    /* Adjust the arrow position */
+    transform: translateY(-50%);
+    border-width: 16px;
+    border-style: solid;
+    border-color: transparent transparent transparent #DFBD67;
+    /* Change last color to match background */
+}
+
+.additional-style-remove {
+    position: relative;
+    background-color: #ffed8052;
+    padding: 7px 7px;
+    margin-right: 18px;
+    /* Adjust as needed */
+    display: inline-block;
+    margin-left: -11px;
+}
+
+
+.step-default {
+    width: 300px;
+    /* Example width */
+    height: 200px;
+    /* Example height */
+    background-image: url('/steps_default.png');
+    background-size: cover;
+    /* Cover ensures the image covers the entire element */
+    background-position: center;
+    /* Center the image within the element */
+    background-repeat: no-repeat;
+    /* Prevent the image from repeating */
+}
+.color-box{
+    background-color: #FFF8E7;
+    border-radius: 12px;
+}
+
+
+.full-lines { 
+    height: 100% !important;
+}
+
+.line-parent {
+    position: relative;
+    overflow: hidden;
+    display: block;
+    height: 95%;
+}
+.step-link-color{
+    color: blue;
+}
+.stepper-link{
+    text-decoration:underline;
+    cursor: pointer
+}
+
+.leftSideDiv {
+    display: inline;
+}
+
+.rightSideDiv {
+    display: inline;
+}
+
+.srcDiv {
+    padding-top: 7px;
+    margin-top: 10px;
+}
+
+.dstDiv {
+    padding-bottom: 7px;
+    margin-bottom: 10px;
+}
+
+.infoImageIcon {
+    display: inline;
+}
+.disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
