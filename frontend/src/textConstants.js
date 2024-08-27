@@ -7,7 +7,7 @@ export const textConstants = {
 
   ONBOARDING_PAGE_ONE_STEP_ONE_HEADING:
     "Here’s a simulation of your app’s onboarding steps, showcasing a multi-step process. With self-serve telemetry, your app can log events for each step (e.g., started, completed), enabling your Growth teams to track success and drop-offs using",
-  ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE: "SaaS Application Onboarding Page",
+  ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE: "Your SaaS Product’s Application Onboarding",
   ONBOARDING_PAGE_ONE_STEP_SUB_TITLE: "will be navigated to Onboarding after ThriveStack completes the steps as listed in the left pane. This page is an",
   ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2:"page of self-serve onboarding within your product. ThriveStack needs a page URL to redirect to. This page will receive data that can be used to ",
   ONBOARDING_PAGE_TWO_TITLE: "Acme Labs Onboarding For End-user",

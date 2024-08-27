@@ -27,7 +27,7 @@ function workFlowHeading() {
             <img></img>  {textConstants.WORKFLOW_PAGE_TITLE}
           </Typography>
 
-          <Typography fontSize={"x-small"}> {`{Template: `}<a href="https://example.com">COGS Efficient</a>{`}`}</Typography><br />
+          <Typography fontSize={"x-small"}> {`{Template: `}<a href="https://docs.app.thrivestack.ai/getting-started/self-serve/integrate/#22-template-2-cogs-efficient-b2b-saas">COGS Efficient</a>{`}`}</Typography><br />
           <Typography backgroundColor="#E1E4EF" color="#0A1E71" padding={"0.5vw"} marginTop={"0vh"} marginBottom={"6vh"}
             fontWeight={"700"} textAlign={"center"} justifyContent={"center"} display={"flex"} lineHeight={"21.6px"} fontSize={'16px'}
           > {textConstants.WORKFLOW_PAGE_DESC}</Typography>
