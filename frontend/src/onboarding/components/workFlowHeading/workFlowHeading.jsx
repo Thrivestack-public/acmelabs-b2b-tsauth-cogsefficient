@@ -14,6 +14,7 @@ function workFlowHeading() {
             sx={{
               textTransform: 'none', alignItems: 'left', backgroundColor: '#343A40'
             }}
+            onClick={() => window.open('https://www.thrivestack.ai/learn', '_blank')}
           >Learn</Button>
         </Grid>
         <Grid>
