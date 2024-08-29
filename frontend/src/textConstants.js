@@ -57,7 +57,7 @@ export const textConstants = {
   TENANT_LIST_PAGE_DESC: `This page serves as a simulation of your backend system's response to tenant creation requests originating from ThriveStack`,
   TENANT_LIST_PAGE_DESC_TWO: `It's important to note that end-users won't have visibility of this page. This simulation provides an experience for testing your backend system.`,
 
-  WORKFLOW_PAGE_TITLE: "How Thrivestack integrates with Yours SaaS (Acme Labs)",
+  WORKFLOW_PAGE_TITLE: "How Thrivestack integrates with Acme Labs (Yours SaaS Product)",
   WORKFLOW_PAGE_DESC: "Self-serve orchestration between your app and Thrivestack",
   WORKFLOW_STEPPER_TITLE: "Thrivestack",
   WORKFLOW_STEPPER_SUBTITLE: "*Works in the background",
