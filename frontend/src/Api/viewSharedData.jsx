@@ -76,7 +76,7 @@ async function getEnrichmentData() {
 
         const apiUrl = ENRICHMENT_DATA_URL
 
-        const authToken = localStorage.getItem("first2AuthenticationData") || localStorage.getItem("lastAuthenticationData");
+        const authToken = localStorage.getItem("firstAuthenticationData") || localStorage.getItem("lastAuthenticationData");
 
         if (!authToken){
             return null
