@@ -38,14 +38,7 @@ function NavBar(props) {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <div className={classes.iconWrapper}>
-            <img src="/favicon-192x192.png" alt="icon" height={30} width={30} />
-            <Typography
-              display="inline"
-              color="primary"
-              className={classes.brandText}
-            >
-              Acme Labs
-            </Typography>
+            <img src="/acme_labs.png" alt="icon" height={30} width={180} />
           </div>
         </Toolbar>
       </AppBar>

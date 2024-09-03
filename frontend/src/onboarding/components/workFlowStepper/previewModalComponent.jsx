@@ -5,7 +5,7 @@ import { textConstants } from '../../../textConstants';
 import CloseIcon from '@mui/icons-material/Close';
 import EmailPreviewComponent from '../../../emailPreview/component/EmailPreviewComponent';
 
-function PreviewModalComponent({ isOpen, onClose }) {
+function PreviewModalComponent({ isOpen, onClose, user }) {
   if (!isOpen) return null;
 
   return (
@@ -24,8 +24,8 @@ function PreviewModalComponent({ isOpen, onClose }) {
           {/* <h3 style={{ lineHeight: '32px', fontSize: '16px', fontWeight: 'bold', marginTop: 0 }}>
             {textConstants.PREV_MODAL_TITLE}
           </h3> */}
-          <IconButton 
-            onClick={onClose} 
+          <IconButton
+            onClick={onClose}
             style={{ position: 'absolute', top: '10px', right: '10px' }}
           >
             <CloseIcon />
@@ -34,14 +34,14 @@ function PreviewModalComponent({ isOpen, onClose }) {
             {textConstants.PREV_MODAL_DESC}
           </Typography>
         </div>
-        
+
         <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
           {/* <Paper sx={{ 
             backgroundColor: '#F8FAFC', 
             boxShadow: 'none',
             overflow: 'hidden'
           }}> */}
-            {/* <Box sx={{ 
+          {/* <Box sx={{ 
               borderBottom: '1px solid #efe9e9', 
               padding: '10px',
               display: 'flex',
@@ -50,13 +50,27 @@ function PreviewModalComponent({ isOpen, onClose }) {
               <img src="/previewImg.png" style={{ height: '20px', marginRight: '10px' }} alt="preview" />
               <Typography>{textConstants.WORKFLOW_STEPPER_TITLE_TWO}</Typography>
             </Box> */}
-            <Box sx={{ padding: '20px' }}>
-              <EmailPreviewComponent previewHtml={textConstants.PREV_MODAL_TEXT1} />
-            </Box>
+
+
+
+          <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
+            {user === "notify" ? (
+              <Box sx={{ padding: '20px' }}>
+                <EmailPreviewComponent previewHtml={textConstants.WELCOME_MAIL} />
+              </Box>
+            ) : (
+              <Box sx={{ padding: '20px' }}>
+                <EmailPreviewComponent previewHtml={textConstants.ENRICHMENT_MAIL} />
+              </Box>
+            )}
+          </div>
+
+
+
           {/* </Paper> */}
         </div>
-        
-        <div style={{ 
+
+        <div style={{
           borderTop: '1px solid #efe9e9',
           padding: '20px',
           textAlign: 'right'
@@ -66,7 +80,7 @@ function PreviewModalComponent({ isOpen, onClose }) {
           </Button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

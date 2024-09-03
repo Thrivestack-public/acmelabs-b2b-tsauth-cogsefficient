@@ -162,7 +162,7 @@ function workFlowStepper(props) {
     'srcLeftStep1': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep1',
-      label: viewSharedData(() => getEnrichedData("firstAuthenticationData"), 15, 3)
+      label: viewSharedData(getEnrichedData, 15, 3)
     },
 
     'srcLeftStep3': {
@@ -233,12 +233,9 @@ function workFlowStepper(props) {
   async function getTenantData() {
 
     // setModalJsonData(baseJsonData)
-    // setModalJsonLabel("Tenant Data");
     setModalInfo(true);
     setIsModalOpen(true);
     const apiResponse = JSON.parse(localStorage.getItem("tenantData"));
-    // console.log("tenantData", apiResponse);
-    // setModalJsonData(apiResponse);
 
     setModalDataArr([{
       JsonData: apiResponse,
@@ -250,26 +247,23 @@ function workFlowStepper(props) {
   // validateAuth
   async function getAuthenticationData(storageKey) {
     // setModalJsonData(baseJsonData)
-    // setModalJsonLabel("Authenticated User Data");
     setModalInfo(false)
     setIsModalOpen(true);
     const apiResponse = JSON.parse(localStorage.getItem(storageKey));
-    console.log("authenticationData", apiResponse);
-    // setModalJsonData(apiResponse);
 
     setModalDataArr([{
       JsonData: apiResponse,
       JsonLabel: "Authenticated User Data"
     }])
-
-    
   }
 
   const [userData, setUserData] = useState()
   const [companyData, setCompanyData] = useState({})
 
+  const [] = useState()
 
-  async function getEnrichedData(storageKey) {
+
+  async function getEnrichedData() {
     setIsModalOpen(true);
     setModalInfo(false)
 
@@ -283,29 +277,36 @@ function workFlowStepper(props) {
     }])
   }
 
-  
-
-  
-
-  useEffect(()=>{
+  useEffect(() => {
     async function saveEnrichmentData() {
       const data = await getEnrichmentData()
-      const EnrichJson = {"product_id":"f01334c6-f726-11ee-bd2a-e60358d08e04","email_id":"akgupta317@gmail.com","user_enrichment_data":"{\"enrichment_first_name\":\"ankit\",\"enrichment_last_name\":\"gupta\",\"enrichment_full_name\":\"ankit gupta\",\"enrichment_avatar\":\"\",\"enrichment_email_provider\":\"\",\"enrichment_city\":\"\",\"enrichment_country\":\"india\",\"enrichment_country_code\":\"\",\"enrichment_employment_domain\":\"\",\"enrichment_employment_name\":\"\",\"enrichment_employment_role\":\"\",\"enrichment_employment_seniority\":\"\",\"enrichment_employment_sub_role\":\"\",\"enrichment_employment_title\":\"\",\"enrichment_facebook_handle\":\"\",\"enrichment_github_handle\":\"\",\"enrichment_linkedin_handle\":\"\",\"enrichment_location\":\"\",\"enrichment_phone\":[],\"enrichment_state\":\"bombay, maharashtra, india\",\"enrichment_state_code\":\"\",\"enrichment_time_zone\":\"\",\"enrichment_twitter_handle\":\"\",\"enrichment_inactive_at\":\"\",\"enrichment_active_at\":\"\"}","company_enrichment_data":"{\"enrichment_name\":\"\",\"enrichment_legal_name\":\"\",\"enrichment_domain\":\"\",\"enrichment_domain_aliases\":null,\"enrichment_phone_numbers\":null,\"enrichment_email_addresses\":null,\"enrichment_sector\":\"\",\"enrichment_industry_group\":\"\",\"enrichment_industry\":\"\",\"enrichment_sub_industry\":\"\",\"enrichment_tags\":null,\"enrichment_description\":\"\",\"enrichment_founder_year\":0,\"enrichment_location\":\"\",\"enrichment_time_zone\":\"\",\"enrichment_street_number\":\"\",\"enrichment_street_name\":\"\",\"enrichment_street_address\":\"\",\"enrichment_city\":\"\",\"enrichment_postal_code\":\"\",\"enrichment_state\":\"\",\"enrichment_state_code\":\"\",\"enrichment_country\":\"\",\"enrichment_country_code\":\"\",\"enrichment_logo\":\"\",\"enrichment_linkedin_handle\":\"\",\"enrichment_facebook_handle\":\"\",\"enrichment_twitter_handle\":\"\",\"enrichment_crunchbase_handle\":\"\",\"enrichment_email_provider\":\"\",\"enrichment_type\":\"\",\"enrichment_phone\":\"\",\"enrichment_traffic_rank\":\"\",\"enrichment_employees\":0,\"enrichment_employees_range\":\"\",\"enrichment_market_cap\":\"\",\"enrichment_raised\":\"\",\"enrichment_annual_revenue\":\"\",\"enrichment_tech\":\"\",\"enrichment_tech_categories\":null}"}
-      setUserData(JSON.parse(EnrichJson["user_enrichment_data"]))
-      setCompanyData(JSON.parse(EnrichJson["company_enrichment_data"]))
-      console.log("Real DATA",data)
-      
-      // setUserData(JSON.parse(data["user_enrichment_data"]))
-      // setCompanyData(JSON.parse(data["company_enrichment_data"]))
+
+      if (data) {
+        const jsonData = JSON.parse(data)
+        setUserData(JSON.parse(jsonData["user_enrichment_data"]))
+        setCompanyData(JSON.parse(jsonData["company_enrichment_data"]))
+      }
     }
 
     saveEnrichmentData()
-  },[])
+  }, [])
+  const [modalUser, setModalUser] = useState('');
+
+
+  const closeModel = () => {
+    setIsPrevModalOpen(false);
+    setModalUser('');
+  };
+
+  const openModal = (user) => {
+    setModalUser(user);
+    setIsPrevModalOpen(true);
+  };
 
 
   return (
     <ArcherContainer strokeColor="#ccc" strokeWidth={1.5} svgContainerStyle={{ zIndex: 1, marginLeft: "7px" }}>
-      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo}/>
+      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo} />
 
       <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '2vh', paddingLeft: '1.5vw' }}>
 
@@ -371,7 +372,7 @@ function workFlowStepper(props) {
                       index={0}
                     >
                       <StepLabel
-                        onClick={() => { setIsPrevModalOpen(true) }}
+                        onClick={() => { openModal('notify') }}
                         StepIconProps={{
                           classes: {
                             root: 'StepperIcon',
@@ -389,6 +390,7 @@ function workFlowStepper(props) {
                           <div className='leftSideDiv dstDiv'></div>
                         </ArcherElement>
                       </StepLabel>
+                      <PreviewModal isOpen={isPrevModalOpen && modalUser === 'notify'} onClose={closePrevModel} user="notify" />
                     </Step>
                     <div style={{ height: '8px', position: 'relative', display: 'inline-block' }}>
                       <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
@@ -397,7 +399,8 @@ function workFlowStepper(props) {
                       completed={isFinalPage}
                       index={0}
                     >
-                      <StepLabel style={{ color: 'blue' }}
+                      <StepLabel
+                        style={{ color: 'blue' }}
                         StepIconProps={{
                           classes: {
                             root: 'StepperIcon',
@@ -406,7 +409,7 @@ function workFlowStepper(props) {
                         }}
                         completed={true}
                         index={0}
-                        onClick={() => { setIsPrevModalOpen(true) }}
+                        onClick={() => { openModal('gtm') }}
                       >
                         <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : '#00000099', fontWeight: 400, fontSize: '0.875rem' }}>Notify Acme GTM team</span>
                         <img src="/Vector.png" className='infoImageIcon'>
@@ -418,7 +421,7 @@ function workFlowStepper(props) {
                           <div className='leftSideDiv dstDiv'></div>
                         </ArcherElement>
                       </StepLabel>
-                      <PreviewModal isOpen={isPrevModalOpen} onClose={closePrevModel} />
+                      <PreviewModal isOpen={isPrevModalOpen && modalUser === 'gtm'} onClose={closePrevModel} user="gtm" />
                     </Step>
                     <div style={{ height: '8px', position: 'relative', display: 'inline-block' }}>
                       <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
@@ -472,7 +475,7 @@ function workFlowStepper(props) {
               paddingBottom={"1vh"}
               paddingTop={"2vh"} justifyContent={'center'} display={"flex"}
               backgroundColor="#F8FAFC"
-              fontSize={["12px", "14px", "14px"]}> <img src="/acme.png" style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img> {textConstants.WORKFLOW_STEPPER_TITLE_TWO}</Typography>
+              fontSize={["12px", "14px", "14px"]}> <img src="/acme.png" style={{ height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img></Typography>
             <Stepper activeStep={activeStep} orientation="vertical" style={{ paddingBottom: '27px', marginTop: '1vw' }} sx={{ color: '#334155' }}>
               <div className={'default-box'}>
                 <ArcherElement id={`dstRightStep${rStepIndex}`}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Paper, Box, Typography } from '@mui/material';
 import DOMPurify from 'dompurify';
-import {getManagementToken, getEnrichmentData} from '../../Api/viewSharedData'
+import { getManagementToken, getEnrichmentData } from '../../Api/viewSharedData'
 
 const EmailPreviewComponent = ({ previewHtml }) => {
 
@@ -11,17 +11,20 @@ const EmailPreviewComponent = ({ previewHtml }) => {
 
   const sanitizedHtml = DOMPurify.sanitize(previewHtml);
 
-  const HtmlEnrichment = (template, value) => {
+  const HtmlEnrichment = (template, values) => {
+    let valueIndex = 0;
+    return template.replace(/%[sd]/g, (match) => {
+      if (valueIndex < values.length) {
+        const replacement = match === '%s' ? String(values[valueIndex]) : parseInt(values[valueIndex], 10);
+        valueIndex++;
+        return replacement;
+      }
+      return match;
+    });
+  };
 
-    return template.replace(/%s/g, function () {
-      return value.shift()
-    })
-
-  }
 
   function getEnrichHTMLTable(userEmailID, userDataStr, orgDataStr) {
-
-    console.log("JSONDATA",userDataStr)
 
 
     const extractString = (data, key) => {
@@ -29,7 +32,7 @@ const EmailPreviewComponent = ({ previewHtml }) => {
     };
 
     const extractInt = (data, key) => {
-      return typeof data.key === 'number' ? data.key : 0;
+      return typeof data[key] === 'number' ? data[key] : 0;
     };
 
     const extractRegisteredDomain = (emailId) => {
@@ -39,11 +42,9 @@ const EmailPreviewComponent = ({ previewHtml }) => {
     };
 
     const enrichTable = [
-      extractString(userDataStr, 'enrichment_employment_title'),
-      extractString(userDataStr, 'enrichment_location'),
       extractString(userDataStr, 'enrichment_full_name'),
       userEmailID,
-      extractString(userDataStr, 'enrichment_employment_title'),
+      extractString(userDataStr, 'enrichment_employment_name'),
       extractString(userDataStr, 'enrichment_employment_title'),
       extractString(userDataStr, 'enrichment_location'),
       extractString(userDataStr, 'enrichment_linkedin_handle'),
@@ -53,8 +54,7 @@ const EmailPreviewComponent = ({ previewHtml }) => {
       extractInt(orgDataStr, 'enrichment_employees'),
       extractInt(orgDataStr, 'enrichment_founder_year'),
       extractString(orgDataStr, 'enrichment_industry')
-  ];
-    console.log("WTF",typeof(userDataStr))
+    ];
     return enrichTable;
   }
 
@@ -62,25 +62,21 @@ const EmailPreviewComponent = ({ previewHtml }) => {
 
   const EnrichredHtml = HtmlEnrichment(sanitizedHtml, EnrichredDataList)
 
-  // ['ACME', "sample", 'Full_name', 'Email_ID', 'Company_Name', 'Job_Title', 'Location']
-
-  
-
-  // console.log("EnrichHTMLTABLE_OUTPUT",EnrichredHtml)
-
 
   useEffect(() => {
 
-    async function callGetEnrichment(){
+    async function callGetEnrichment() {
       const response = await getEnrichmentData()
-      console.log(response)
-      // setEnrichJsonData(response)
-      const EnrichJson = {"product_id":"f01334c6-f726-11ee-bd2a-e60358d08e04","email_id":"akgupta317@gmail.com","user_enrichment_data":"{\"enrichment_first_name\":\"ankit\",\"enrichment_last_name\":\"gupta\",\"enrichment_full_name\":\"ankit gupta\",\"enrichment_avatar\":\"\",\"enrichment_email_provider\":\"\",\"enrichment_city\":\"\",\"enrichment_country\":\"india\",\"enrichment_country_code\":\"\",\"enrichment_employment_domain\":\"\",\"enrichment_employment_name\":\"\",\"enrichment_employment_role\":\"\",\"enrichment_employment_seniority\":\"\",\"enrichment_employment_sub_role\":\"\",\"enrichment_employment_title\":\"\",\"enrichment_facebook_handle\":\"\",\"enrichment_github_handle\":\"\",\"enrichment_linkedin_handle\":\"\",\"enrichment_location\":\"\",\"enrichment_phone\":[],\"enrichment_state\":\"bombay, maharashtra, india\",\"enrichment_state_code\":\"\",\"enrichment_time_zone\":\"\",\"enrichment_twitter_handle\":\"\",\"enrichment_inactive_at\":\"\",\"enrichment_active_at\":\"\"}","company_enrichment_data":"{\"enrichment_name\":\"\",\"enrichment_legal_name\":\"\",\"enrichment_domain\":\"\",\"enrichment_domain_aliases\":null,\"enrichment_phone_numbers\":null,\"enrichment_email_addresses\":null,\"enrichment_sector\":\"\",\"enrichment_industry_group\":\"\",\"enrichment_industry\":\"\",\"enrichment_sub_industry\":\"\",\"enrichment_tags\":null,\"enrichment_description\":\"\",\"enrichment_founder_year\":0,\"enrichment_location\":\"\",\"enrichment_time_zone\":\"\",\"enrichment_street_number\":\"\",\"enrichment_street_name\":\"\",\"enrichment_street_address\":\"\",\"enrichment_city\":\"\",\"enrichment_postal_code\":\"\",\"enrichment_state\":\"\",\"enrichment_state_code\":\"\",\"enrichment_country\":\"\",\"enrichment_country_code\":\"\",\"enrichment_logo\":\"\",\"enrichment_linkedin_handle\":\"\",\"enrichment_facebook_handle\":\"\",\"enrichment_twitter_handle\":\"\",\"enrichment_crunchbase_handle\":\"\",\"enrichment_email_provider\":\"\",\"enrichment_type\":\"\",\"enrichment_phone\":\"\",\"enrichment_traffic_rank\":\"\",\"enrichment_employees\":0,\"enrichment_employees_range\":\"\",\"enrichment_market_cap\":\"\",\"enrichment_raised\":\"\",\"enrichment_annual_revenue\":\"\",\"enrichment_tech\":\"\",\"enrichment_tech_categories\":null}"}
-      setUserData(EnrichJson["user_enrichment_data"])
-      setCompanyData(EnrichJson["company_enrichment_data"])
-      setUserEmail(EnrichJson["email_id"])
 
-      console.log("BHAI",typeof(EnrichJson["user_enrichment_data"]))
+      if (response) {
+        const data = JSON.parse(response)
+        setUserData(JSON.parse(data["user_enrichment_data"]))
+        setCompanyData(JSON.parse(data["company_enrichment_data"])) 
+        setUserEmail(data["email_id"])
+        console.log("PARSEDUSER DATA",JSON.parse(data["user_enrichment_data"]))
+        console.log("PARSEDcomp DATA",JSON.parse(data["company_enrichment_data"]))
+      }
+
     }
 
     callGetEnrichment()

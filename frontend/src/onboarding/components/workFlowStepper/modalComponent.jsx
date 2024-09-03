@@ -53,7 +53,7 @@ const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo }) => {
               </>
             ) : (
               <>
-                ThriveStack offers seamless APIs that can be easily integrated into your onboarding page to fetch enriched user and company data. The data is delivered in JSON format as shown.
+                {textConstants.MODAL_DEFAULT_INFO}
               </>
             )}
           </div>

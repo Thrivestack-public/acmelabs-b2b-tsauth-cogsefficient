@@ -2,8 +2,6 @@ import axios from 'axios';
 import { sharedDataApiBase, sharedDataApiEndpoint, validateAuthApiBase, validateAuthApiBaseEndpoint } from '../constants';
 
 import { MANAGEMENT_TOKEN_API_URL, ENRICHMENT_DATA_URL } from '../constants'
-import { useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 
 // Function to fetch data using Axios
 async function fetchData(workflowRuntimeId, stepId) {
@@ -53,14 +51,13 @@ async function getManagementToken() {
         const result = await response.json();
         const token = result["api_trigger_token"];
 
-        return token
+        if (token) {
+            localStorage.setItem("TSManagementToken", token);
+        } else {
+            console.error("Token not found");
+        }
 
-        // if (token) {
-        //     console.log("GETMANAGEMENTTOKEN",token)
-        //     localStorage.setItem("TSManagementToken", token);
-        // } else {
-        //     console.error("Token not found");
-        // }
+        return token
     }
 
     catch (error) {
@@ -72,49 +69,56 @@ async function getManagementToken() {
 
 
 async function getEnrichmentData() {
-        
-    const token = await getManagementToken()
 
-    const apiUrl = ENRICHMENT_DATA_URL
+    if (!localStorage.getItem("enrichmentData")) {
 
-    // const email = jwtDecode(token)
+        const token = await getManagementToken()
 
-    const params = {
-        productId: 'f01334c6-f726-11ee-bd2a-e60358d08e04',
-        emailId: "aniketd@thrivestack.ai"
-    }
+        const apiUrl = ENRICHMENT_DATA_URL
 
-    const url = new URL(apiUrl);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        const authToken = localStorage.getItem("first2AuthenticationData") || localStorage.getItem("lastAuthenticationData");
 
-    console.log("URL:-",url)
-
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
+        if (!authToken){
+            return null
         }
 
+        const tokenJson = JSON.parse(authToken)
+
+        const email = (tokenJson)["emailId"]
+
+        const params = {
+            productId: 'f01334c6-f726-11ee-bd2a-e60358d08e04',
+            emailId: email
+        }
+
+        const url = new URL(apiUrl);
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
+            const data = await response.json()
+            localStorage.setItem("enrichmentData", JSON.stringify(data))
+            return (localStorage.getItem("enrichmentData"))
+            
+
+
+        } catch (error) {
+            return { error: error.message };
+        }
         
-        localStorage.setItem("enrichmentData", response)
-
-        return response
-
-
-    } catch (error) {
-        return { error: error.message };
     }
+    return (localStorage.getItem("enrichmentData"))
     
-
-    // else{
-    //     return (localStorage.getItem("enrichmentData"))
-    // }
 
 }
 
