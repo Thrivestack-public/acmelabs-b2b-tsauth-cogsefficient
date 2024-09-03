@@ -7,7 +7,7 @@ import StepConnector from '@mui/material/StepConnector';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Card, CardContent } from '@mui/material';
-import { textConstants } from "../../../textConstants";
+import { textConstants } from "../../../textConstants"; 
 import { Grid } from '@mui/material';
 import { ArcherContainer, ArcherElement } from "react-archer";
 import { jwtDecode } from 'jwt-decode';
@@ -211,12 +211,12 @@ function workFlowStepper(props) {
 
   useEffect(async () => {
     if (isFirstPage) {
-      const authApiResponse = await fetchValidateAuth(authOTP);
+      const authApiResponse = localStorage.getItem("firstAuthenticationData") || await fetchValidateAuth(authOTP);
       const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
       localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
     }
     if (isFinalPage) {
-      const authApiResponse = await fetchValidateAuth(authOTP);
+      const authApiResponse = localStorage.getItem("lastAuthenticationData") || await fetchValidateAuth(authOTP);
       const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
       const emailId = authApiResponseJson.emailId;
       setUserEmail(emailId);
