@@ -14,9 +14,10 @@ import { jwtDecode } from 'jwt-decode';
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import JsonViewerModal from './modalComponent';
 import PreviewModal from './previewModalComponent';
-import { fetchData as fetchTenantData, fetchValidateAuth } from '../../../Api/viewSharedData';
+import { fetchData as fetchTenantData, fetchValidateAuth, getEnrichmentData } from '../../../Api/viewSharedData';
 import { useLocation } from 'react-router-dom';
 import './workFlowStepper.css';
+
 
 
 function workFlowStepper(props) {
@@ -41,9 +42,14 @@ function workFlowStepper(props) {
     setPageStepCounter(4);
   }
 
-  const baseJsonData = { "progress": "loading data.." }
-  const [modalJsonLabel, setModalJsonLabel] = useState('Authenticated UserData');
-  const [modalJsonData, setModalJsonData] = useState(baseJsonData);
+  const [modalDataArr, setModalDataArr] = useState([{
+    JsonData: {},
+    JsonLabel: ""
+  }]);
+
+  // const baseJsonData = { "progress": "loading data.." }
+  // const [modalJsonLabel, setModalJsonLabel] = useState('Authenticated UserData');
+  // const [modalJsonData, setModalJsonData] = useState(baseJsonData);
   const steps = [
     {
       label: 'Authenticate',
@@ -75,7 +81,7 @@ function workFlowStepper(props) {
       description: ''
     },
     {
-      label: 'Send End user Welcome Link',
+      label: 'Send End user Welcome Email',
       description: ''
     },
 
@@ -141,7 +147,8 @@ function workFlowStepper(props) {
     targetAnchor: "left",
     sourceAnchor: "right",
     style: {
-      lineStyle: 'straight'
+      lineStyle: 'straight',
+      marginLeft: "10px"
     },
     label: null,
     className: 'arrow-class',
@@ -151,30 +158,37 @@ function workFlowStepper(props) {
   };
 
   const leftToRightArrowRelations = {
-    'srcLeftStep3': {
+
+    'srcLeftStep1': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep1',
+      label: viewSharedData(() => getEnrichedData("firstAuthenticationData"), 15, 3)
+    },
+
+    'srcLeftStep3': {
+      ...leftToRightArrowRelation,
+      targetId: 'dstRightStep2',
       label: viewSharedData(() => getAuthenticationData("firstAuthenticationData"), 30, 3)
     },
     'srcLeftStep5': {
       ...leftToRightArrowRelation,
-      targetId: 'dstRightStep3',
+      targetId: 'dstRightStep4',
       label: viewSharedData(getTenantData, 15, 5),
     },
     'srcLeftStep10': {
       ...leftToRightArrowRelation,
-      targetId: 'dstRightStep4',
+      targetId: 'dstRightStep5',
       label: <div>{viewSharedData(() => getAuthenticationData("lastAuthenticationData"), 65, 10)} {redirectData}</div>
     }
   }
 
   const rightToLeftArrowRelations = {
-    'srcRightStep2': {
+    'srcRightStep3': {
       ...rightToLeftArrowRelation,
       targetId: 'dstLeftStep3',
       label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
     },
-    'srcRightStep3': {
+    'srcRightStep4': {
       ...rightToLeftArrowRelation,
       targetId: 'dstLeftStep5',
       label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
@@ -194,15 +208,16 @@ function workFlowStepper(props) {
   const closePrevModel = () => setIsPrevModalOpen(false);
   const [modalInfo, setModalInfo] = useState(true);
 
+
   useEffect(async () => {
     if (isFirstPage) {
       const authApiResponse = await fetchValidateAuth(authOTP);
-      const authApiResponseJson = authApiResponse.token?jwtDecode(authApiResponse.token):{"error": "No token found"};
+      const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
       localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
     }
     if (isFinalPage) {
       const authApiResponse = await fetchValidateAuth(authOTP);
-      const authApiResponseJson = authApiResponse.token?jwtDecode(authApiResponse.token):{"error": "No token found"};
+      const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
       const emailId = authApiResponseJson.emailId;
       setUserEmail(emailId);
       localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
@@ -216,29 +231,81 @@ function workFlowStepper(props) {
   }, []);
 
   async function getTenantData() {
-    setModalJsonData(baseJsonData)
-    setModalJsonLabel("Tenant Data");
+
+    // setModalJsonData(baseJsonData)
+    // setModalJsonLabel("Tenant Data");
     setModalInfo(true);
     setIsModalOpen(true);
     const apiResponse = JSON.parse(localStorage.getItem("tenantData"));
-    console.log("tenantData", apiResponse);
-    setModalJsonData(apiResponse);
+    // console.log("tenantData", apiResponse);
+    // setModalJsonData(apiResponse);
+
+    setModalDataArr([{
+      JsonData: apiResponse,
+      JsonLabel: "Tenant Data"
+    }])
+
   }
 
   // validateAuth
   async function getAuthenticationData(storageKey) {
-    setModalJsonData(baseJsonData)
-    setModalJsonLabel("Authenticated User Data");
+    // setModalJsonData(baseJsonData)
+    // setModalJsonLabel("Authenticated User Data");
     setModalInfo(false)
     setIsModalOpen(true);
     const apiResponse = JSON.parse(localStorage.getItem(storageKey));
     console.log("authenticationData", apiResponse);
-    setModalJsonData(apiResponse);
+    // setModalJsonData(apiResponse);
+
+    setModalDataArr([{
+      JsonData: apiResponse,
+      JsonLabel: "Authenticated User Data"
+    }])
+
+    
   }
 
+  const [userData, setUserData] = useState()
+  const [companyData, setCompanyData] = useState({})
+
+
+  async function getEnrichedData(storageKey) {
+    setIsModalOpen(true);
+    setModalInfo(false)
+
+    setModalDataArr([{
+      JsonData: userData,
+      JsonLabel: "User Enrichment Data"
+    },
+    {
+      JsonData: companyData,
+      JsonLabel: "Company Enrichment Data"
+    }])
+  }
+
+  
+
+  
+
+  useEffect(()=>{
+    async function saveEnrichmentData() {
+      const data = await getEnrichmentData()
+      const EnrichJson = {"product_id":"f01334c6-f726-11ee-bd2a-e60358d08e04","email_id":"akgupta317@gmail.com","user_enrichment_data":"{\"enrichment_first_name\":\"ankit\",\"enrichment_last_name\":\"gupta\",\"enrichment_full_name\":\"ankit gupta\",\"enrichment_avatar\":\"\",\"enrichment_email_provider\":\"\",\"enrichment_city\":\"\",\"enrichment_country\":\"india\",\"enrichment_country_code\":\"\",\"enrichment_employment_domain\":\"\",\"enrichment_employment_name\":\"\",\"enrichment_employment_role\":\"\",\"enrichment_employment_seniority\":\"\",\"enrichment_employment_sub_role\":\"\",\"enrichment_employment_title\":\"\",\"enrichment_facebook_handle\":\"\",\"enrichment_github_handle\":\"\",\"enrichment_linkedin_handle\":\"\",\"enrichment_location\":\"\",\"enrichment_phone\":[],\"enrichment_state\":\"bombay, maharashtra, india\",\"enrichment_state_code\":\"\",\"enrichment_time_zone\":\"\",\"enrichment_twitter_handle\":\"\",\"enrichment_inactive_at\":\"\",\"enrichment_active_at\":\"\"}","company_enrichment_data":"{\"enrichment_name\":\"\",\"enrichment_legal_name\":\"\",\"enrichment_domain\":\"\",\"enrichment_domain_aliases\":null,\"enrichment_phone_numbers\":null,\"enrichment_email_addresses\":null,\"enrichment_sector\":\"\",\"enrichment_industry_group\":\"\",\"enrichment_industry\":\"\",\"enrichment_sub_industry\":\"\",\"enrichment_tags\":null,\"enrichment_description\":\"\",\"enrichment_founder_year\":0,\"enrichment_location\":\"\",\"enrichment_time_zone\":\"\",\"enrichment_street_number\":\"\",\"enrichment_street_name\":\"\",\"enrichment_street_address\":\"\",\"enrichment_city\":\"\",\"enrichment_postal_code\":\"\",\"enrichment_state\":\"\",\"enrichment_state_code\":\"\",\"enrichment_country\":\"\",\"enrichment_country_code\":\"\",\"enrichment_logo\":\"\",\"enrichment_linkedin_handle\":\"\",\"enrichment_facebook_handle\":\"\",\"enrichment_twitter_handle\":\"\",\"enrichment_crunchbase_handle\":\"\",\"enrichment_email_provider\":\"\",\"enrichment_type\":\"\",\"enrichment_phone\":\"\",\"enrichment_traffic_rank\":\"\",\"enrichment_employees\":0,\"enrichment_employees_range\":\"\",\"enrichment_market_cap\":\"\",\"enrichment_raised\":\"\",\"enrichment_annual_revenue\":\"\",\"enrichment_tech\":\"\",\"enrichment_tech_categories\":null}"}
+      setUserData(JSON.parse(EnrichJson["user_enrichment_data"]))
+      setCompanyData(JSON.parse(EnrichJson["company_enrichment_data"]))
+      console.log("Real DATA",data)
+      
+      // setUserData(JSON.parse(data["user_enrichment_data"]))
+      // setCompanyData(JSON.parse(data["company_enrichment_data"]))
+    }
+
+    saveEnrichmentData()
+  },[])
+
+
   return (
-    <ArcherContainer strokeColor="#ccc" strokeWidth={1} svgContainerStyle={{ zIndex: 1 }}>
-      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalJsonData} tabLabel={modalJsonLabel} info={modalInfo} />
+    <ArcherContainer strokeColor="#ccc" strokeWidth={1.5} svgContainerStyle={{ zIndex: 1, marginLeft: "7px" }}>
+      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo}/>
 
       <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '2vh', paddingLeft: '1.5vw' }}>
 
@@ -419,9 +486,31 @@ function workFlowStepper(props) {
                   <div className='rightSideDiv srcDiv'></div>
                 </ArcherElement>
               </div>
-              <div className='default-box' style={{ height: '123px' }}>
+
+              <div className='default-box' style={{ height: '50px' }}>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
+
+
+              <div className={`default-box ${(pageStepCounter == 0) ? 'arrow-box' : 'color-box'}`} id="enrichment-box">
+                <Step index={0}>
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
+                    icon={<>
+                      <ArcherElement id={`dstRightStep${++rStepIndex}`}>
+                        <div className='rightSideDiv dstDiv'></div>
+                      </ArcherElement>
+                      <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
+                        <div className='rightSideDiv srcDiv'></div>
+                      </ArcherElement><img src={(pageStepCounter > 0) ? step_complete_img : (pageStepCounter == 0 ? step_in_progress_img : step_default_img)} style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Enrichment </StepLabel>
+                </Step>
+              </div>
+
+
+              <div className='default-box'>
+                <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
+              </div>
+
+
               <div className={`default-box ${(pageStepCounter == 1 || pageStepCounter == 2) ? 'arrow-box' : 'color-box'}`} id="onboarding-box">
                 <span style={{ fontSize: '16px', fontWeight: '400', color: '#cfad56' }}>Onboarding</span>
                 <Step index={0}>
@@ -468,7 +557,7 @@ function workFlowStepper(props) {
               <div className='default-box'>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
-              <div className={`default-box ${(pageStepCounter == 3) ? 'arrow-box' : 'color-box'}`} id="provision-box">
+              <div className={`default-box ${(pageStepCounter == 4) ? 'arrow-box' : 'color-box'}`} id="provision-box">
                 <Step index={0}>
                   <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
                     icon={<>
@@ -477,7 +566,7 @@ function workFlowStepper(props) {
                       </ArcherElement>
                       <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                         <div className='rightSideDiv srcDiv'></div>
-                      </ArcherElement><img src={(pageStepCounter == 4) ? step_complete_img : (pageStepCounter == 3 ? step_in_progress_img : step_default_img)} style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Provision tenant </StepLabel>
+                      </ArcherElement><img src={(pageStepCounter == 5) ? step_complete_img : (pageStepCounter == 4 ? step_in_progress_img : step_default_img)} style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Provision tenant </StepLabel>
                 </Step>
               </div>
               <div className='default-box'>
@@ -489,7 +578,7 @@ function workFlowStepper(props) {
               <div className='default-box' style={{ height: '175px' }}>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
-              <div className={`default-box ${(pageStepCounter >= 4) ? 'arrow-box' : 'color-box'}`} id="home-box">
+              <div className={`default-box ${(pageStepCounter >= 5) ? 'arrow-box' : 'color-box'}`} id="home-box">
                 <Step sx={{ color: 'green' }} index={0}>
                   <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
                     icon={<>

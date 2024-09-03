@@ -141,6 +141,7 @@
 
 .infoImageIcon {
     display: inline;
+    margin-left: 5px;
 }
 .disabled{
     opacity: 0.5;

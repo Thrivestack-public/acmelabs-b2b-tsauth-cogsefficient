@@ -12,7 +12,7 @@ function workFlowHeading() {
             variant="contained"
             size="small"
             sx={{
-              textTransform: 'none', alignItems: 'left', backgroundColor: '#343A40'
+              textTransform: 'none', alignItems: 'right', backgroundColor: '#343A40', marginBottom: "3vh",
             }}
             onClick={() => window.open('https://www.thrivestack.ai/learn', '_blank')}
           >Learn</Button>

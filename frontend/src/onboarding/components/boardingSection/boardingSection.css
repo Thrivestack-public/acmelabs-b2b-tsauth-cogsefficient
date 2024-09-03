@@ -5,7 +5,8 @@
 .leftGrid-body {
     display: flex;
     padding-top: 12vh;
-    padding-left: 1vw;
+    padding-left: 2vw;
+    padding-right: 1vw;
     background-color: #e2e8f040
 }
 .rightGrid-body{

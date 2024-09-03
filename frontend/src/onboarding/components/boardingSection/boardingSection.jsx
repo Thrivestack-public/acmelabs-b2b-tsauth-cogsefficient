@@ -32,7 +32,7 @@ function boardingSection() {
     <Fragment>
       <Box sx={{ flexGrow: 1, height: '100vh' }}>
         <Grid container spacing={0} className='mainGrid-body'>
-          <Grid item xs={5.5} className='leftGrid-body'>
+          <Grid item xs={5.0} className='leftGrid-body'>
             <Box>
               <WorkFlowHeading />
               <WorkFlowStepper />

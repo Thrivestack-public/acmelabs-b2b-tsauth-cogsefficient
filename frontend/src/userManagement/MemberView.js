@@ -160,7 +160,7 @@ export default function MemberView() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("TSManagementToken")}`
+                    "": `Bearer ${localStorage.getItem("TSManagementToken")}`
                 },
                 body: JSON.stringify({
                     user_id: user.user_id,
