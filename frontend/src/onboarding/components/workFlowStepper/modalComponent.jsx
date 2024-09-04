@@ -5,10 +5,16 @@ import { textConstants } from "../../../textConstants";
 import { IconButton, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo }) => {
+const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo, modalDesc, modalLink }) => {
   const [activeTab, setActiveTab] = useState(0); // Track the active tab
 
   if (!isOpen) return null;
+
+  const infoConstant = textConstants[modalInfo]
+  
+  const descConstant = textConstants[modalDesc]
+
+  const docLink = textConstants[modalLink]
 
   return (
     <div className="modal-overlay">
@@ -16,7 +22,7 @@ const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo }) => {
         <div className="modal-header">
           <div className="modal-header-content">
             <div className="modal-title">{textConstants.SHARED_DATA_MODAL_TITLE}</div>
-            <div className="modal-subtitle">{textConstants.SHARED_DATA_MODAL_DESC}</div>
+            <div className="modal-subtitle">{descConstant}</div>
           </div>
           <IconButton
             onClick={onClose}
@@ -45,17 +51,8 @@ const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo }) => {
 
         <div className='modal-info-footer'>
           <div>
-            {modalInfo ? (
-              <>
-                Tenant &gt; A webhook callback would be made to YourApp's backend.
-                <span className='link'>  &lt;Learn more&gt;  </span>
-                to configure and accept the requests.
-              </>
-            ) : (
-              <>
-                {textConstants.MODAL_DEFAULT_INFO}
-              </>
-            )}
+                {infoConstant}<br></br>
+                <span className='link'><a href={docLink}> &lt;Learn how to implement&gt;  </a> </span>
           </div>
         </div>
 

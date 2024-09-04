@@ -206,7 +206,9 @@ function workFlowStepper(props) {
   const closeModal = () => setIsModalOpen(false);
   const [isPrevModalOpen, setIsPrevModalOpen] = useState(false);
   const closePrevModel = () => setIsPrevModalOpen(false);
-  const [modalInfo, setModalInfo] = useState(true);
+  const [modalInfo, setModalInfo] = useState('')
+  const [modalDesc, setModalDesc] = useState('')
+  const [modalLink, setModalLink] = useState('')
 
 
   useEffect(async () => {
@@ -233,8 +235,9 @@ function workFlowStepper(props) {
   async function getTenantData() {
 
     // setModalJsonData(baseJsonData)
-    setModalInfo(true);
-    setIsModalOpen(true);
+    setModalInfo('SHARED_DATA_MODAL_DESC_TENANT');
+    setIsModalOpen(false);
+    setModalLink('TENANT_DOCS_LINK')
     const apiResponse = JSON.parse(localStorage.getItem("tenantData"));
 
     setModalDataArr([{
@@ -247,8 +250,10 @@ function workFlowStepper(props) {
   // validateAuth
   async function getAuthenticationData(storageKey) {
     // setModalJsonData(baseJsonData)
-    setModalInfo(false)
+    setModalInfo('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
     setIsModalOpen(true);
+    setModalDesc('SHARED_DATA_MODAL_DESC_REDIRECT')
+    setModalLink('ONBOARDING_DOCS_LINK')
     const apiResponse = JSON.parse(localStorage.getItem(storageKey));
 
     setModalDataArr([{
@@ -265,7 +270,9 @@ function workFlowStepper(props) {
 
   async function getEnrichedData() {
     setIsModalOpen(true);
-    setModalInfo(false)
+    setModalInfo('MODAL_DEFAULT_INFO')
+    setModalDesc('SHARED_DATA_MODAL_DESC')
+    setModalLink('ENRICHMENT_DOCS_LINK')
 
     setModalDataArr([{
       JsonData: userData,
@@ -306,7 +313,7 @@ function workFlowStepper(props) {
 
   return (
     <ArcherContainer strokeColor="#ccc" strokeWidth={1.5} svgContainerStyle={{ zIndex: 1, marginLeft: "7px" }}>
-      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo} />
+      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo} modalDesc={modalDesc} modalLink={modalLink}/>
 
       <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '2vh', paddingLeft: '1.5vw' }}>
 
@@ -358,7 +365,7 @@ function workFlowStepper(props) {
                           </ArcherElement>
                         </StepLabel>
                       </Step>
-                      {index == 4 && <div style={{ height: '107px' }}>
+                      {index == 4 && <div style={{ height: '125px' }}>
                         <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
                       </div>}
                     </>
@@ -490,7 +497,7 @@ function workFlowStepper(props) {
                 </ArcherElement>
               </div>
 
-              <div className='default-box' style={{ height: '50px' }}>
+              <div className='default-box' style={{ height: '30px' }}>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
 
@@ -509,7 +516,7 @@ function workFlowStepper(props) {
               </div>
 
 
-              <div className='default-box'>
+              <div className='default-box' style={{ height: '45px' }}>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
 
@@ -560,7 +567,7 @@ function workFlowStepper(props) {
               <div className='default-box'>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
-              <div className={`default-box ${(pageStepCounter == 4) ? 'arrow-box' : 'color-box'}`} id="provision-box">
+              <div className={'default-box color-box'} id="provision-box">
                 <Step index={0}>
                   <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
                     icon={<>
@@ -569,7 +576,7 @@ function workFlowStepper(props) {
                       </ArcherElement>
                       <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                         <div className='rightSideDiv srcDiv'></div>
-                      </ArcherElement><img src={(pageStepCounter == 5) ? step_complete_img : (pageStepCounter == 4 ? step_in_progress_img : step_default_img)} style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Provision tenant </StepLabel>
+                      </ArcherElement><img src={(pageStepCounter == 4) ? step_complete_img : (pageStepCounter == 3 ? step_in_progress_img : step_default_img)} style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Provision tenant </StepLabel>
                 </Step>
               </div>
               <div className='default-box'>
@@ -581,7 +588,7 @@ function workFlowStepper(props) {
               <div className='default-box' style={{ height: '175px' }}>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
-              <div className={`default-box ${(pageStepCounter >= 5) ? 'arrow-box' : 'color-box'}`} id="home-box">
+              <div className={`default-box ${(pageStepCounter >= 4) ? 'arrow-box' : 'color-box'}`} id="home-box">
                 <Step sx={{ color: 'green' }} index={0}>
                   <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
                     icon={<>
@@ -590,7 +597,7 @@ function workFlowStepper(props) {
                       </ArcherElement>
                       <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                         <div className='rightSideDiv srcDiv'></div>
-                      </ArcherElement><img src="/home.png" style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>} >Product Home  </StepLabel>
+                      </ArcherElement><img src="/home.png" style={{ height: '1.5vw', padding: '0% 1%', marginTop: '-1%' }}></img></>} >Product Home  </StepLabel>
                 </Step>
               </div>
             </Stepper>
