@@ -65,9 +65,11 @@ export const textConstants = {
   SHARED_DATA_MODAL_TITLE: "Shared Data", // FOR MODAL
   SHARED_DATA_MODAL_DESC: "ThriveStack will send enrichment data to your application. Use the People and Company enrichment data to know who is the End User signing up to your product and which company they belong to. Personalise your end user's product onboarding journey or use it for customer segmentation, lead scoring, personalised outreach and more.",
   SHARED_DATA_MODAL_DESC_TENANT: "On successful validation of the end user, Thrivestack will create a Tenant on their side and send you the details of create and other Tenant lifecycle events on your side to keep them in sync. This is done via registering your webhook on ThriveStack and listening ThriveStack's webhook at your end.",
+  SHARED_DATA_MODAL_INFO_TENANT: "This is done via registering your webhook on ThriveStack and listening ThriveStack's webhook at your end.",
   SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT: "ThriveStack will redirect the user to your Product's onboarding. You can use the enrichment data to personalise your end user's onboarding journey or your take the user through your custom onboarding steps.",
   SHARED_DATA_MODAL_INFO_ONBOARDING_REDIRECT:'You will need to acknowledge and redirect the user back to ThriveStack to complete the Self-Serve flow',
   SHARED_DATA_MODAL_DESC_REDIRECT: "On successful completion of the Self-Serve workflow, ThriveStack will redirect the end user to your Product's home page that you have configured in ThriveStack",
+  SHARED_DATA_MODAL_INFO_REDIRECT:"You can configure a home or product's page of your choice by setting the configuration.",
   PREV_MODAL_TITLE: "Preview Email",
   PREV_MODAL_DESC: "Here’s a preview of the email that was sent to the end user",
   PREV_MODAL_TEXT: "Hi Team,",

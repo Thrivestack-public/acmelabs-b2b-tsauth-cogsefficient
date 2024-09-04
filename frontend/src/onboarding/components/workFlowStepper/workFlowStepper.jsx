@@ -178,7 +178,7 @@ function workFlowStepper(props) {
     'srcLeftStep10': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep5',
-      label: <div>{viewSharedData(() => getAuthenticationData("lastAuthenticationData"), 65, 10)} {redirectData}</div>
+      label: <div>{viewSharedData(() => getRedirectData("lastAuthenticationData"), 65, 10)} {redirectData}</div>
     }
   }
 
@@ -233,10 +233,11 @@ function workFlowStepper(props) {
   }, []);
 
   async function getTenantData() {
-
+    console.log("getTenantData Method..!")
     // setModalJsonData(baseJsonData)
-    setModalInfo('SHARED_DATA_MODAL_DESC_TENANT');
-    setIsModalOpen(false);
+    setModalDesc('SHARED_DATA_MODAL_DESC_TENANT')
+    setModalInfo('SHARED_DATA_MODAL_INFO_TENANT');
+    setIsModalOpen(true);
     setModalLink('TENANT_DOCS_LINK')
     const apiResponse = JSON.parse(localStorage.getItem("tenantData"));
 
@@ -250,10 +251,27 @@ function workFlowStepper(props) {
   // validateAuth
   async function getAuthenticationData(storageKey) {
     // setModalJsonData(baseJsonData)
+    console.log("getAuthenticated_invoked storageKey :",storageKey)
     setModalInfo('SHARED_DATA_MODAL_INFO_ONBOARDING_REDIRECT')
     setIsModalOpen(true);
     setModalDesc('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
     setModalLink('ONBOARDING_DOCS_LINK')
+    const apiResponse = JSON.parse(localStorage.getItem(storageKey));
+
+    setModalDataArr([{
+      JsonData: apiResponse,
+      JsonLabel: "Authenticated User Data"
+    }])
+
+    console.log("SetModalDataArray",setModalDataArr)
+  }
+
+  async function getRedirectData(storageKey) {
+    // setModalJsonData(baseJsonData)
+    setModalInfo('SHARED_DATA_MODAL_INFO_REDIRECT')
+    setIsModalOpen(true);
+    setModalDesc('SHARED_DATA_MODAL_DESC_REDIRECT')
+    setModalLink('REDIRECT_DOCS_LINK')
     const apiResponse = JSON.parse(localStorage.getItem(storageKey));
 
     setModalDataArr([{
