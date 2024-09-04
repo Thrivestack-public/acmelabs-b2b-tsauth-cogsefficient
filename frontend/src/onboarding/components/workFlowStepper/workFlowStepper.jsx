@@ -250,9 +250,9 @@ function workFlowStepper(props) {
   // validateAuth
   async function getAuthenticationData(storageKey) {
     // setModalJsonData(baseJsonData)
-    setModalInfo('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
+    setModalInfo('SHARED_DATA_MODAL_INFO_ONBOARDING_REDIRECT')
     setIsModalOpen(true);
-    setModalDesc('SHARED_DATA_MODAL_DESC_REDIRECT')
+    setModalDesc('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
     setModalLink('ONBOARDING_DOCS_LINK')
     const apiResponse = JSON.parse(localStorage.getItem(storageKey));
 
