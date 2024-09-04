@@ -79,14 +79,14 @@ function conclusion() {
                 </ArcherContainer>
                 <span className='card-header'>Congratulations!</span> <br />
                 <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC}</span> <br />
-                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}</span><span fontSize={"x-small"}> {``}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient">Github repo</a>{``}</span>
+                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}</span><span fontSize={"x-small"}> {``}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient" target='_blank'>Github repo</a>{``}</span>
             </Box>
             <div className='div-font' style={{ paddingLeft: '6%' }}>
 
                 <span className='conclusion-li-heading'>{textConstants.CONCLUSION_PAGE_VERIFY_INFO}:</span>
                 <ol type='number' style={{ paddingInlineStart: '15px', fontSize: "16px" }}>
-                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE} <span style={{ fontWeight: '500', fontSize: "16px" }}>&lt;{userEmail}&gt;</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>how to customize it.</li>
-                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO} <span style={{ fontWeight: '500', fontSize: "16px" }}>&lt;GTM@acmelabs.com&gt;.</span><span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>  on how to configure it.</li>
+                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE} <span style={{ fontWeight: '500', fontSize: "16px" }}>{userEmail}</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>how to customize it.</li>
+                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO} <span style={{ fontWeight: '500', fontSize: "16px" }}>GTM@acmelabs.com </span><span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>  on how to configure it.</li>
                 </ol>
                 <Card style={{ paddingLeft: '28px' }}>
                     <Grid container spacing={2} columns={12} >

@@ -134,7 +134,7 @@ function FormSection(props) {
               </Typography>
            <Typography>
            <span style={{color:'#FF26DC'}}>End user</span> {textConstants.ONBOARDING_PAGE_ONE_STEP_SUB_TITLE} <span style={{color:'#FF26DC'}}>indicative</span> {textConstants.ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2}
-           <span style={{color:'#FF26DC'}}>indicative</span> your onboarding experience.
+           <span style={{color:'#FF26DC'}}>indicate</span> your onboarding experience.
            </Typography>
               <Card
                 className={classes.card}

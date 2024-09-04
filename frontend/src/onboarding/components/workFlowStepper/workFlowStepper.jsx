@@ -7,7 +7,7 @@ import StepConnector from '@mui/material/StepConnector';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Card, CardContent } from '@mui/material';
-import { textConstants } from "../../../textConstants"; 
+import { textConstants } from "../../../textConstants";
 import { Grid } from '@mui/material';
 import { ArcherContainer, ArcherElement } from "react-archer";
 import { jwtDecode } from 'jwt-decode';
@@ -213,18 +213,23 @@ function workFlowStepper(props) {
 
   useEffect(async () => {
     if (isFirstPage) {
-      const authApiResponse = localStorage.getItem("firstAuthenticationData") || await fetchValidateAuth(authOTP);
-      const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
-      localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
+      const firstAuthenticationData = localStorage.getItem("firstAuthenticationData");
+      if (!firstAuthenticationData) {
+        const authApiResponse = await fetchValidateAuth(authOTP);
+        const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
+        localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
+      }
     }
     if (isFinalPage) {
-      const authApiResponse = localStorage.getItem("lastAuthenticationData") || await fetchValidateAuth(authOTP);
-      const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
-      const emailId = authApiResponseJson.emailId;
-      setUserEmail(emailId);
-      localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
+      const lastAuthenticationData = localStorage.getItem("lastAuthenticationData");
+      if (!lastAuthenticationData) {
+        const authApiResponse = await fetchValidateAuth(authOTP);
+        const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
+        const emailId = authApiResponseJson.emailId;
+        setUserEmail(emailId);
+        localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
+      }
     }
-
   }, []);
 
   useEffect(async () => {
@@ -233,8 +238,6 @@ function workFlowStepper(props) {
   }, []);
 
   async function getTenantData() {
-    console.log("getTenantData Method..!")
-    // setModalJsonData(baseJsonData)
     setModalDesc('SHARED_DATA_MODAL_DESC_TENANT')
     setModalInfo('SHARED_DATA_MODAL_INFO_TENANT');
     setIsModalOpen(true);
@@ -250,21 +253,36 @@ function workFlowStepper(props) {
 
   // validateAuth
   async function getAuthenticationData(storageKey) {
-    // setModalJsonData(baseJsonData)
-    console.log("getAuthenticated_invoked storageKey :",storageKey)
-    setModalInfo('SHARED_DATA_MODAL_INFO_ONBOARDING_REDIRECT')
-    setIsModalOpen(true);
-    setModalDesc('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
-    setModalLink('ONBOARDING_DOCS_LINK')
-    const apiResponse = JSON.parse(localStorage.getItem(storageKey));
+    try {
+      console.log("getAuthenticated_invoked storageKey :", storageKey)
+      setModalInfo('SHARED_DATA_MODAL_INFO_ONBOARDING_REDIRECT')
+      setIsModalOpen(true);
+      setModalDesc('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
+      setModalLink('ONBOARDING_DOCS_LINK')
+      const apiResponse = {};
+      const ls = localStorage.getItem(storageKey)
+      console.log("LocalStorage Auth DATA: ", ls)
+      if (ls) {
+        apiResponse = JSON.parse(ls)
+        console.log("API respponseINSIDE: ", apiResponse)
+      }
+      console.log("API respponseOUT: ", apiResponse)
 
-    setModalDataArr([{
-      JsonData: apiResponse,
-      JsonLabel: "Authenticated User Data"
-    }])
+      setModalDataArr([{
+        JsonData: apiResponse,
+        JsonLabel: "Authenticated User Data"
+      }])
 
-    console.log("SetModalDataArray",setModalDataArr)
+    } catch (error) {
+      console.log("error in getAuthenticationData", error)
+      setModalDataArr([{
+        JsonData: {},
+        JsonLabel: ""
+      }])
+    }
   }
+
+
 
   async function getRedirectData(storageKey) {
     // setModalJsonData(baseJsonData)
@@ -303,18 +321,31 @@ function workFlowStepper(props) {
   }
 
   useEffect(() => {
-    async function saveEnrichmentData() {
-      const data = await getEnrichmentData()
-
-      if (data) {
-        const jsonData = JSON.parse(data)
-        setUserData(JSON.parse(jsonData["user_enrichment_data"]))
-        setCompanyData(JSON.parse(jsonData["company_enrichment_data"]))
+    async function fetchAndSaveEnrichmentData() {
+      try {
+        const data = await getEnrichmentData();
+        if (data) {
+          const jsonData = JSON.parse(data);
+          if (jsonData) {
+            if (jsonData.user_enrichment_data) {
+              setUserData(JSON.parse(jsonData.user_enrichment_data));
+            }
+            if (jsonData.company_enrichment_data) {
+              setCompanyData(JSON.parse(jsonData.company_enrichment_data));
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error processing enrichment data", error);
       }
     }
+    fetchAndSaveEnrichmentData();
+  }, []);
 
-    saveEnrichmentData()
-  }, [])
+
+
+
+
   const [modalUser, setModalUser] = useState('');
 
 
@@ -331,7 +362,7 @@ function workFlowStepper(props) {
 
   return (
     <ArcherContainer strokeColor="#ccc" strokeWidth={1.5} svgContainerStyle={{ zIndex: 1, marginLeft: "7px" }}>
-      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo} modalDesc={modalDesc} modalLink={modalLink}/>
+      <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo} modalDesc={modalDesc} modalLink={modalLink} />
 
       <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '2vh', paddingLeft: '1.5vw' }}>
 
