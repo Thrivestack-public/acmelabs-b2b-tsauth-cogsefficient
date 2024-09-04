@@ -532,6 +532,14 @@ function workFlowStepper(props) {
               paddingTop={"2vh"} justifyContent={'center'} display={"flex"}
               backgroundColor="#F8FAFC"
               fontSize={["12px", "14px", "14px"]}> <img src="/acme.png" style={{ height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img></Typography>
+              <Typography
+              variant="p"
+              fontWeight={500}
+              justifyContent={'center'} display={"flex"}
+              fontSize={["8px", "10px", "12px"]}
+            >
+              {textConstants.WORKFLOW_STEPPER_SUBTITLE_2}
+            </Typography>
             <Stepper activeStep={activeStep} orientation="vertical" style={{ paddingBottom: '27px', marginTop: '1vw' }} sx={{ color: '#334155' }}>
               <div className={'default-box'}>
                 <ArcherElement id={`dstRightStep${rStepIndex}`}>

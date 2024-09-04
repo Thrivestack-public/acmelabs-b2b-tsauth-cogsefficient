@@ -57,10 +57,11 @@ export const textConstants = {
   TENANT_LIST_PAGE_DESC: `This page serves as a simulation of your backend system's response to tenant creation requests originating from ThriveStack`,
   TENANT_LIST_PAGE_DESC_TWO: `It's important to note that end-users won't have visibility of this page. This simulation provides an experience for testing your backend system.`,
 
-  WORKFLOW_PAGE_TITLE: "How Thrivestack integrates with Acme Labs (Yours SaaS Product)",
+  WORKFLOW_PAGE_TITLE: "How Thrivestack integrates with Acme Labs (Your SaaS Product)",
   WORKFLOW_PAGE_DESC: "Self-serve orchestration between your app and Thrivestack",
   WORKFLOW_STEPPER_TITLE: "Thrivestack",
   WORKFLOW_STEPPER_SUBTITLE: "*Works in the background",
+  WORKFLOW_STEPPER_SUBTITLE_2: "*Your SaaS Product",
   WORKFLOW_STEPPER_TITLE_TWO: "Acme Labs",
   SHARED_DATA_MODAL_TITLE: "Shared Data", // FOR MODAL
   SHARED_DATA_MODAL_DESC: "ThriveStack will send enrichment data to your application. Use the People and Company enrichment data to know who is the End User signing up to your product and which company they belong to. Personalise your end user's product onboarding journey or use it for customer segmentation, lead scoring, personalised outreach and more.",

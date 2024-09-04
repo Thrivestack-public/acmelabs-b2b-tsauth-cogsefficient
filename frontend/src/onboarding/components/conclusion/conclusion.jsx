@@ -86,7 +86,7 @@ function conclusion() {
                 <span className='conclusion-li-heading'>{textConstants.CONCLUSION_PAGE_VERIFY_INFO}:</span>
                 <ol type='number' style={{ paddingInlineStart: '15px', fontSize: "16px" }}>
                     <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE} <span style={{ fontWeight: '500', fontSize: "16px" }}>{userEmail}</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>how to customize it.</li>
-                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO} <span style={{ fontWeight: '500', fontSize: "16px" }}>GTM@acmelabs.com </span><span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>  on how to configure it.</li>
+                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO} <span style={{ fontWeight: '500', fontSize: "16px" }}>{userEmail}</span><span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>  on how to configure it.</li>
                 </ol>
                 <Card style={{ paddingLeft: '28px' }}>
                     <Grid container spacing={2} columns={12} >

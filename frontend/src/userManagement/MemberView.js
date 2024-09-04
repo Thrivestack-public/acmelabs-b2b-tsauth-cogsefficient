@@ -156,7 +156,7 @@ export default function MemberView() {
     const updateUserData = async (user) => {
         try {
             setLoading(true);
-            const response = await fetch(`https://api.dev.app.thrivestack.ai/api/user/update`, {
+            const response = await fetch(`https://api.app.thrivestack.ai/api/user/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
