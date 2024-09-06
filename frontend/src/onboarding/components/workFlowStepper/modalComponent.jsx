@@ -11,7 +11,7 @@ const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo, modalDesc, moda
   if (!isOpen) return null;
 
   const infoConstant = textConstants[modalInfo]
-  
+
   const descConstant = textConstants[modalDesc]
 
   const docLink = textConstants[modalLink]
@@ -25,7 +25,7 @@ const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo, modalDesc, moda
             <div className="modal-subtitle">{descConstant}</div>
           </div>
           <IconButton
-            onClick={()=>{setActiveTab(0); onClose(); }}
+            onClick={() => { setActiveTab(0); onClose(); }}
             className="close-button"
             size="large">
             <CloseIcon />
@@ -45,19 +45,16 @@ const JsonViewerModal = ({ isOpen, onClose, jsonData, modalInfo, modalDesc, moda
             ))}
           </div>
           <div className="json-viewer">
+            <div className='modal-info-footer'>
+              {infoConstant}<br></br>
+              <span className='link'><a href={docLink} target='_blank'> Learn how to implement  </a> </span>
+            </div>
             <ReactJson src={jsonData[activeTab].JsonData} theme="monokai" collapsed={false} />
           </div>
         </div>
 
-        <div className='modal-info-footer'>
-          <div>
-                {infoConstant}<br></br>
-                <span className='link'><a href={docLink} target='_blank'> Learn how to implement  </a> </span>
-          </div>
-        </div>
-
         <div className="modal-footer">
-          <Button variant="contained" color="primary" onClick={()=>{setActiveTab(0); onClose(); }}>
+          <Button variant="contained" color="primary" onClick={() => { setActiveTab(0); onClose(); }}>
             Got it
           </Button>
         </div>

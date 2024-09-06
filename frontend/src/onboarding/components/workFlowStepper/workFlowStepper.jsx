@@ -30,6 +30,7 @@ function workFlowStepper(props) {
   const workflowRuntimeId = queryParams.get('runtimeId') || localStorage.getItem("workflowRuntimeId");
   const authOTP = queryParams.get('authOTP');
   console.log("workflowRuntimeId", workflowRuntimeId);
+  console.log("AuthOTP", authOTP);
 
   if (workflowRuntimeId && workflowRuntimeId !== "") {
     localStorage.setItem("workflowRuntimeId", workflowRuntimeId)
@@ -213,16 +214,15 @@ function workFlowStepper(props) {
 
   useEffect(async () => {
     if (isFirstPage) {
-      const firstAuthenticationData = localStorage.getItem("firstAuthenticationData");
-      if (!firstAuthenticationData) {
+      if (authOTP) {
         const authApiResponse = await fetchValidateAuth(authOTP);
         const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
         localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
       }
     }
+
     if (isFinalPage) {
-      const lastAuthenticationData = localStorage.getItem("lastAuthenticationData");
-      if (!lastAuthenticationData) {
+      if (authOTP) {
         const authApiResponse = await fetchValidateAuth(authOTP);
         const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
         const emailId = authApiResponseJson.emailId;
@@ -259,7 +259,7 @@ function workFlowStepper(props) {
       setIsModalOpen(true);
       setModalDesc('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
       setModalLink('ONBOARDING_DOCS_LINK')
-      const apiResponse = {};
+      let apiResponse = {};
       const ls = localStorage.getItem(storageKey)
       console.log("LocalStorage Auth DATA: ", ls)
       if (ls) {
@@ -277,7 +277,7 @@ function workFlowStepper(props) {
       console.log("error in getAuthenticationData", error)
       setModalDataArr([{
         JsonData: {},
-        JsonLabel: ""
+        JsonLabel: "Authenticated User Data"
       }])
     }
   }
@@ -495,7 +495,7 @@ function workFlowStepper(props) {
                         Redirect
                         <img src="/Vector.png" className='infoImageIcon'>
                         </img>
-                        <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
+                        <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : [] }>
                           <div className='leftSideDiv srcDiv'></div>
                         </ArcherElement>
                         <ArcherElement id={`dstLeftStep${lStepIndex}`}>
@@ -531,7 +531,7 @@ function workFlowStepper(props) {
               paddingBottom={"1vh"}
               paddingTop={"2vh"} justifyContent={'center'} display={"flex"}
               backgroundColor="#F8FAFC"
-              fontSize={["12px", "14px", "14px"]}> <img src="/acme.png" style={{ height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img></Typography>
+              fontSize={["12px", "14px", "14px"]}> <img src="/acme.png" style={{ height: '1.2vw', padding: '0% 1%', marginTop: '-1%' }}></img></Typography>
               <Typography
               variant="p"
               fontWeight={500}

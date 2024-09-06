@@ -16,10 +16,9 @@
     /* height: 20%; */
 }
 .thrive-img{
-    /* height: 16px; */
-    /* position: absolute; */
+    height: 30px;
     display: inline-block;
-    margin-top: 30px;
+    margin-top: 22px;
     left: 4px;
 }
 .acme-img{
@@ -27,7 +26,7 @@
     display: inline-block;
     margin-top: 22px;
     left: 220px;
-    width: 224px;
+    height: 30px;
 
 }
 .div-font{
