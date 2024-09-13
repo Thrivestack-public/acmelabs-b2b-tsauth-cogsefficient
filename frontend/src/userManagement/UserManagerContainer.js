@@ -9,7 +9,7 @@ const UserManager = () => {
         const fetchData = async () => {
             if (localStorage.getItem("TSManagementToken") == null) {
                 try {
-                    const thrivestackResponse = await fetch('https://api.dev.app.thrivestack.ai/api/token', {
+                    const thrivestackResponse = await fetch('https://api.app.thrivestack.ai/api/token', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

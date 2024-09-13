@@ -66,6 +66,10 @@ function workFlowStepper(props) {
       description: ``,
     },
     {
+      label: 'Prevent Abuse',
+      description: ``,
+    },
+    {
       label: 'Onboarding Redirect',
       description: ''
     },
@@ -79,6 +83,7 @@ function workFlowStepper(props) {
     },
     {
       label: 'Store Leads',
+      subLabel: '(Built in CRM + Bring Your Own CRM)',
       description: ''
     },
     {
@@ -92,7 +97,7 @@ function workFlowStepper(props) {
   var lStepIndex = steps.length - 1;
 
   // labels of arrow
-  const viewSharedData = (updateJsonData, leftDistance, activeOnStep) => (
+  const viewSharedData = (updateJsonData, leftDistance, activeOnStep, label) => (
     <div
       className={stepCompleted < activeOnStep ? 'disabled' : ''}
       style={{
@@ -108,7 +113,7 @@ function workFlowStepper(props) {
       }}
       onClick={stepCompleted < activeOnStep ? null : updateJsonData}
     >
-      View Shared Data
+      {label}
     </div>
   );
 
@@ -163,35 +168,35 @@ function workFlowStepper(props) {
     'srcLeftStep1': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep1',
-      label: viewSharedData(getEnrichedData, 15, 3)
+      label: viewSharedData(getEnrichedData, 15, 3, "View Enriched Data")
     },
 
-    'srcLeftStep3': {
+    'srcLeftStep4': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep2',
-      label: viewSharedData(() => getAuthenticationData("firstAuthenticationData"), 30, 3)
+      label: viewSharedData(() => getAuthenticationData("firstAuthenticationData"), 30, 3, "View Authenticated Data")
     },
-    'srcLeftStep5': {
+    'srcLeftStep6': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep4',
-      label: viewSharedData(getTenantData, 15, 5),
+      label: viewSharedData(getTenantData, 15, 5, "Tenant Data"),
     },
-    'srcLeftStep10': {
+    'srcLeftStep11': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep5',
-      label: <div>{viewSharedData(() => getRedirectData("lastAuthenticationData"), 65, 10)} {redirectData}</div>
+      label: <div>{viewSharedData(() => getRedirectData("lastAuthenticationData"), 65, 10, "Redirected Data")} {redirectData}</div>
     }
   }
 
   const rightToLeftArrowRelations = {
     'srcRightStep3': {
       ...rightToLeftArrowRelation,
-      targetId: 'dstLeftStep3',
+      targetId: 'dstLeftStep4',
       label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
     },
     'srcRightStep4': {
       ...rightToLeftArrowRelation,
-      targetId: 'dstLeftStep5',
+      targetId: 'dstLeftStep6',
       label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
     },
   }
@@ -404,6 +409,7 @@ function workFlowStepper(props) {
                           }}
                         >
                           {step.label}
+
                           <img src="/Vector.png" className='infoImageIcon'>
                           </img>
                           <ArcherElement id={`srcLeftStep${index}`} relations={leftToRightArrowRelations[`srcLeftStep${index}`] ? [leftToRightArrowRelations[`srcLeftStep${index}`]] : []}>
@@ -411,7 +417,10 @@ function workFlowStepper(props) {
                           </ArcherElement>
                           <ArcherElement id={`dstLeftStep${index}`}>
                             <div className='leftSideDiv dstDiv'></div>
-                          </ArcherElement>
+                          </ArcherElement><br></br>
+                          <div className="subLabel" style={{ fontSize: '12px', marginTop: '4px' }}>
+                            {step.subLabel}
+                          </div>
                         </StepLabel>
                       </Step>
                       {index == 4 && <div style={{ height: '125px' }}>
@@ -495,7 +504,7 @@ function workFlowStepper(props) {
                         Redirect
                         <img src="/Vector.png" className='infoImageIcon'>
                         </img>
-                        <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : [] }>
+                        <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
                           <div className='leftSideDiv srcDiv'></div>
                         </ArcherElement>
                         <ArcherElement id={`dstLeftStep${lStepIndex}`}>
@@ -532,7 +541,7 @@ function workFlowStepper(props) {
               paddingTop={"2vh"} justifyContent={'center'} display={"flex"}
               backgroundColor="#F8FAFC"
               fontSize={["12px", "14px", "14px"]}> <img src="/acme.png" style={{ height: '1.2vw', padding: '0% 1%', marginTop: '-1%' }}></img></Typography>
-              <Typography
+            <Typography
               variant="p"
               fontWeight={500}
               justifyContent={'center'} display={"flex"}
