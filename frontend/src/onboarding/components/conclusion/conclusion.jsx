@@ -54,14 +54,29 @@ function conclusion() {
 
     return (
         <div container className='conclusion-heading'>
-            <Box className='cardBg' style={{ paddingTop: '5vh' }}>
+
+            <Box className='flex cardBg' style={{ paddingTop: '0vh !important' }}>
+                <div
+                    style={{
+                        backgroundColor: '#dae6f5',
+                        color: '#333',
+                        fontWeight: 'bold',
+                        fontSize: '17px',
+                        textAlign: 'center',
+                        marginBottom: '10px',
+                    }}
+                >
+                    {textConstants.WORKFLOW_PAGE_BANNER_RIGHT}
+                </div>
                 {showGratification && (
                     <Confetti id='confetti-test' style={{ marginLeft: '45%' }} width={width * 0.55} />
                 )}
+
+                <div className='card-header' style={{ fontSize: '5vh' }}>Congratulations!</div> <br />
+                <div className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC}</div> <br />
+                <div className='card-subHeader' style={{ marginBottom: '50px' }}>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}{` `}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient" target='_blank'>Github repo</a>{``}</div> <br />
+
                 
-                <span className='card-header' style={{ fontSize: '5vh', marginBottom: '20vh' }}>Congratulations!</span> <br />
-                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC}</span> <br />
-                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}</span><span fontSize={"x-small"}> {``}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient" target='_blank'>Github repo</a>{``}</span>
             </Box>
             <div className='div-font' style={{ paddingLeft: '6%' }}>
 

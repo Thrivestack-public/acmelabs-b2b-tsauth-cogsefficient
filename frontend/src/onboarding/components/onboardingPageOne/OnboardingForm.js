@@ -6,10 +6,11 @@ import {
   MenuItem,
   Button,
   FormControl,
-  InputLabel,
   Box,
+  Typography,
   Snackbar,
   Alert,
+  InputLabel
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
@@ -19,14 +20,59 @@ const styles = (theme) => ({
   formContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: theme.spacing(4),
+    gap: theme.spacing(3),
+    padding: theme.spacing(4),
+    borderRadius: "12px",
+    border: "1px solid #e0e0e0",
+    backgroundColor: "#ffffff",
+    margin: "0 auto",
     alignItems: "center",
-    justifyContent: "center",
-    maxWidth: 400,
-    marginLeft: "1vw",
+    width: "100%", 
+    maxWidth: "600px",
+    minWidth: "600px",
   },
-  buttonMarginBottom: {
-    marginBottom: theme.spacing(3),
+  placeholder: {
+    color: theme.palette.text.disabled, 
+  },
+  inputFieldContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start", 
+    width: "100%",
+  },
+  inputField: {
+    width: "100%",
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+    },
+  },
+  selectField: {
+    width: "100%",
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+    },
+  },
+  label: {
+    marginBottom: theme.spacing(1), 
+  },
+  button: {
+    backgroundColor: "#5D2A6D",
+    color: "#fff",
+    padding: theme.spacing(1.5, 3),
+    fontSize: "16px",
+    borderRadius: "8px",
+    "&:hover": {
+      backgroundColor: "#482073",
+    },
+    "&:disabled": {
+      backgroundColor: "#9a82bd",
+    },
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    marginTop: theme.spacing(2),
   },
 });
 
@@ -86,79 +132,88 @@ const OrganizationOnboardingForm = (props) => {
   return (
     <form onSubmit={handleSubmit}>
       <Box className={classes.formContainer}>
-        <TextField
-          label="Organization Name"
-          name="orgName"
-          value={formData.orgName}
-          onChange={handleInputChange}
-          error={!!errors.orgName}
-          helperText={errors.orgName}
-          required
-          fullWidth
-        />
-        <FormControl fullWidth>
-          <InputLabel>Organization Type *</InputLabel>
-          <Select
-            label="Organization Type"
-            name="orgType"
-            value={formData.orgType}
+        {/* Organization Name Field */}
+        <Box className={classes.inputFieldContainer}>
+          <Typography variant="subtitle1" className={classes.label}>
+            Organization name*
+          </Typography>
+          <TextField
+            name="orgName"
+            value={formData.orgName}
             onChange={handleInputChange}
-            error={!!errors.orgType}
+            error={!!errors.orgName}
+            helperText={errors.orgName}
+            required
             fullWidth
-          >
-            <MenuItem value="Business Organization">
-              Business Organization
-            </MenuItem>
-            <MenuItem value="Educational Institution">
-              Educational Institution
-            </MenuItem>
-            <MenuItem value="Nonprofit Organization">
-              Nonprofit Organization
-            </MenuItem>
-            <MenuItem value="Government Organization">
-              Government Organization
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel>Industry *</InputLabel>
-          <Select
-            label="Industry"
-            name="industry"
-            value={formData.industry}
-            onChange={handleInputChange}
-            error={!!errors.industry}
-            fullWidth
-          >
-            <MenuItem value="Cloud Computing">Cloud Computing</MenuItem>
-            <MenuItem value="Data Analytics">
-              Data Analytics and Business Intelligence
-            </MenuItem>
-            <MenuItem value="Financial Technology">
-              Financial Technology
-            </MenuItem>
-            <MenuItem value="Healthcare IT">Healthcare IT</MenuItem>
-            <MenuItem value="Education Technology (EdTech)">
-              Education Technology (EdTech)
-            </MenuItem>
-            <MenuItem value="Artificial Intelligence">
-              Artificial Intelligence
-            </MenuItem>
-            <MenuItem value="Other">Other</MenuItem>
-          </Select>
-        </FormControl>
-        <Box width="100%" display="flex" justifyContent="flex-start">
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={loading}
-            loading={loading}
-            className={classes.buttonMarginBottom}
-          >
-            Next
-          </Button>
+            className={classes.inputField}
+            label="Enter"
+            sx={{
+              '& legend': { display: 'none' },
+              '& .MuiInputLabel-shrink': { opacity: 0, transition: "all 0.1s ease-in" }
+            }}
+          />
         </Box>
+
+        {/* Organization Type Field */}
+        <Box className={classes.inputFieldContainer}>
+          <Typography variant="subtitle1" className={classes.label}>
+            Organization type*
+          </Typography>
+          <FormControl fullWidth className={classes.selectField} error={!!errors.orgType}>
+            <Select
+              name="orgType"
+              value={formData.orgType}
+              onChange={handleInputChange}
+              fullWidth
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                <div style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Select</div>
+              </MenuItem>
+              <MenuItem value="Business Organization">Business Organization</MenuItem>
+              <MenuItem value="Educational Institution">Educational Institution</MenuItem>
+              <MenuItem value="Nonprofit Organization">Nonprofit Organization</MenuItem>
+              <MenuItem value="Government Organization">Government Organization</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* Industry Field */}
+        <Box className={classes.inputFieldContainer}>
+          <Typography variant="subtitle1" className={classes.label}>
+            Industry*
+          </Typography>
+          <FormControl fullWidth className={classes.selectField}>
+            <Select
+              name="industry"
+              value={formData.industry}
+              onChange={handleInputChange}
+              error={!!errors.industry}
+              fullWidth
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                <div style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Select</div>
+              </MenuItem>
+              <MenuItem value="Cloud Computing">Cloud Computing</MenuItem>
+              <MenuItem value="Data Analytics">
+                Data Analytics and Business Intelligence
+              </MenuItem>
+              <MenuItem value="Financial Technology">
+                Financial Technology
+              </MenuItem>
+              <MenuItem value="Healthcare IT">Healthcare IT</MenuItem>
+              <MenuItem value="Education Technology (EdTech)">
+                Education Technology (EdTech)
+              </MenuItem>
+              <MenuItem value="Artificial Intelligence">
+                Artificial Intelligence
+              </MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+       
         {/* Snackbar for error message */}
         <Snackbar
           open={showErrorMessage}
@@ -173,6 +228,17 @@ const OrganizationOnboardingForm = (props) => {
             {errorMessage}
           </Alert>
         </Snackbar>
+      </Box>
+
+      <Box className={classes.buttonContainer}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={loading}
+          className={classes.button}
+        >
+          Next step
+        </Button>
       </Box>
     </form>
   );

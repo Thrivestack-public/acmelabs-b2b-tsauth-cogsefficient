@@ -29,7 +29,7 @@ export const OnboardingFormDataContextProvider = ({ children }) => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageStepCounter, setPageStepCounter] = useState(1);
-  const [stepCompleted, setStepCompleted] = useState(3);
+  const [stepCompleted, setStepCompleted] = useState(5);
   const [runtimeId, setRuntimeId] = useState("");
   const [workflowId, setWorkflowId] = useState("");
   const [returnUrl, setReturnUrl] = useState("");

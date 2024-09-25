@@ -2,7 +2,6 @@ import React, { memo, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import AOS from "aos/dist/aos";
 import withStyles from "@mui/styles/withStyles";
-import NavBar from "./navigation/NavBar";
 import "aos/dist/aos.css";
 import CookieRulesDialog from "./cookies/CookieRulesDialog";
 import CookieConsent from "./cookies/CookieConsent";
@@ -62,13 +61,13 @@ function Main(props) {
           open={isCookieRulesDialogOpen}
           onClose={handleCookieRulesDialogClose}
         />
-        <NavBar
+        {/* <NavBar
           selectedTab={selectedTab}
           selectTab={setSelectedTab}
           mobileDrawerOpen={isMobileDrawerOpen}
           handleMobileDrawerOpen={handleMobileDrawerOpen}
           handleMobileDrawerClose={handleMobileDrawerClose}
-        />
+        /> */}
         <Routing selectHome={selectHome} />
       </OnboardingFormDataContextProvider>
     </div>

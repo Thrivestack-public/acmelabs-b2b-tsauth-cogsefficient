@@ -20,6 +20,7 @@ import './workFlowStepper.css';
 
 
 
+
 function workFlowStepper(props) {
   const stepId = "";
   const location = useLocation();
@@ -29,8 +30,6 @@ function workFlowStepper(props) {
   const queryParams = new URLSearchParams(location.search);
   const workflowRuntimeId = queryParams.get('runtimeId') || localStorage.getItem("workflowRuntimeId");
   const authOTP = queryParams.get('authOTP');
-  console.log("workflowRuntimeId", workflowRuntimeId);
-  console.log("AuthOTP", authOTP);
 
   if (workflowRuntimeId && workflowRuntimeId !== "") {
     localStorage.setItem("workflowRuntimeId", workflowRuntimeId)
@@ -40,7 +39,7 @@ function workFlowStepper(props) {
   if (isFinalPage) {
     setCurrentPage(3);
     setStepCompleted(11);
-    setPageStepCounter(4);
+    setPageStepCounter(6);
   }
 
   const [modalDataArr, setModalDataArr] = useState([{
@@ -53,42 +52,52 @@ function workFlowStepper(props) {
   // const [modalJsonData, setModalJsonData] = useState(baseJsonData);
   const steps = [
     {
-      label: 'Authenticate',
+      label: 'Authenticate User',
       description: ``,
+      pStep: 0
     },
     {
       label: 'Enrich Users and Accounts',
-      description:
-        '',
-    },
-    {
-      label: 'Check Waitlist',
-      description: ``,
+      description: '',
+      pStep: 1
     },
     {
       label: 'Prevent Abuse',
       description: ``,
+      pStep: 2
     },
     {
-      label: 'Onboarding Redirect',
-      description: ''
+      label: 'Check Waitlist',
+      description: ``,
+      pStep: 3
+    },
+    {
+      label: 'Initiate Onboarding',
+      description: '',
+      pStep: 4
     },
     {
       label: 'Apply Pricing Plan',
-      description: ''
+      description: '',
+      pStep: 5
     },
     {
-      label: 'Provision tenant Request',
-      description: ''
+      label: 'Initiate Create/Join tenant',
+      subLabel: '',
+      description: '',
+      pStep: 5
+    },
+    {
+      label: 'Acknowledge Tenant',
+      subLabel: 'Provision',
+      description: '',
+      pStep: 5
     },
     {
       label: 'Store Leads',
       subLabel: '(Built in CRM + Bring Your Own CRM)',
-      description: ''
-    },
-    {
-      label: 'Send End user Welcome Email',
-      description: ''
+      description: '',
+      pStep: 5
     },
 
 
@@ -102,14 +111,17 @@ function workFlowStepper(props) {
       className={stepCompleted < activeOnStep ? 'disabled' : ''}
       style={{
         color: "blue",
-        fontSize: "12px",
+        fontSize: "13px",
         position: "relative",
-        top: '-1.3em',
+        top: '30%',
+        left: `${leftDistance}%`,
         textDecoration: 'underline',
         textAlign: "center",
         width: "9em",
         cursor: stepCompleted < activeOnStep ? 'not-allowed' : 'pointer',
-        left: `${leftDistance}%`,
+        backgroundColor: '#F8FAFC',
+        backgroundSize: 'auto 100%',
+        borderRadius: '8px',
       }}
       onClick={stepCompleted < activeOnStep ? null : updateJsonData}
     >
@@ -123,22 +135,23 @@ function workFlowStepper(props) {
         color: "black",
         fontSize: "12px",
         marginTop: "5px",
-
+        backgroundColor: '#F8FAFC',
+        padding: '0px 5px 0px 0px',
+        marginLeft: '30px',
       }}
     >
       Acknowledge
     </div>
   );
 
-  const redirectData = (
+  const redirectToTS = (
     <div
       style={{
+        color: "black",
         fontSize: "12px",
-        padding: "3%, 5%",
-        textAlign: "center",
-        backgroundColor: "#F8FAFC",
-        position: "relative",
-        left: '65%'
+        marginTop: "5px",
+        marginLeft: '50px',
+        backgroundColor: '#F8FAFC',
       }}
     >
       Redirect
@@ -149,18 +162,22 @@ function workFlowStepper(props) {
   let leftToRightArrowRelation = {
     targetId: "id_of_target",
     sourceId: "id_of_source",
-    top: "0px",
     targetAnchor: "left",
     sourceAnchor: "right",
     style: {
       lineStyle: 'straight',
-      marginLeft: "10px"
+      marginLeft: "25px",
+      marginRight: "25px",
     },
     label: null,
     className: 'arrow-class',
   }
   let rightToLeftArrowRelation = {
-    ...leftToRightArrowRelation, targetAnchor: "right", sourceAnchor: "left"
+    ...leftToRightArrowRelation, targetAnchor: "right", sourceAnchor: "left",
+    style: {
+      lineStyle: 'straight',
+      marginLeft: "2px",
+    },
   };
 
   const leftToRightArrowRelations = {
@@ -168,38 +185,68 @@ function workFlowStepper(props) {
     'srcLeftStep1': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep1',
-      label: viewSharedData(getEnrichedData, 15, 3, "View Enriched Data")
+      label: viewSharedData(getEnrichedData, 5, 3, "View Enriched Data")
     },
 
-    'srcLeftStep4': {
+    'srcLeftStep24': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep2',
-      label: viewSharedData(() => getAuthenticationData("firstAuthenticationData"), 30, 3, "View Authenticated Data")
+      label: viewSharedData(() => getAuthenticationData("firstAuthenticationData"), 5, 3, "View Authenticated Data")
     },
     'srcLeftStep6': {
       ...leftToRightArrowRelation,
-      targetId: 'dstRightStep4',
-      label: viewSharedData(getTenantData, 15, 5, "Tenant Data"),
+      targetId: 'dstRightStep8',
+      label: viewSharedData(getTenantData, 2, 5, "Tenant Data"),
     },
     'srcLeftStep11': {
       ...leftToRightArrowRelation,
-      targetId: 'dstRightStep5',
-      label: <div>{viewSharedData(() => getRedirectData("lastAuthenticationData"), 65, 10, "Redirected Data")} {redirectData}</div>
+      targetId: 'dstRightStep10',
+      label: <div>{viewSharedData(() => getRedirectData("lastAuthenticationData"), 65, 10, "End user data")}</div>
     }
   }
 
   const rightToLeftArrowRelations = {
     'srcRightStep3': {
       ...rightToLeftArrowRelation,
-      targetId: 'dstLeftStep4',
-      label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
+      targetId: 'dstLeftStep34',
+      style: {
+        lineStyle: 'straight',
+        marginLeft: "2px",
+        strokeDasharray: "5,5"
+      },
     },
-    'srcRightStep4': {
+    'srcRightStep5': {
       ...rightToLeftArrowRelation,
-      targetId: 'dstLeftStep6',
-      label: <div><div style={{ display: 'inline-block', width: '100%' }}> </div> {acknowledgeData}</div>
+      targetId: 'dstLeftStep44',
+      style: {
+        lineStyle: 'straight',
+        marginLeft: "2px",
+        strokeDasharray: "5,5"
+      },
     },
-  }
+    'srcRightStep6': {
+      ...rightToLeftArrowRelation,
+      targetId: 'dstLeftStep54',
+      label: <div>{redirectToTS}</div>,
+      style: {
+        lineStyle: 'straight',
+      },
+    },
+    'srcRightStep7': {
+      ...rightToLeftArrowRelation,
+      targetId: 'dstLeftStep64',
+      style: {
+        lineStyle: 'straight',
+        marginLeft: "2px",
+        strokeDasharray: "5,5"
+      },
+    },
+    'srcRightStep9': {
+      ...rightToLeftArrowRelation,
+      targetId: 'dstLeftStep7',
+      label: <div>{acknowledgeData}</div>,
+    },
+  };
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -365,11 +412,18 @@ function workFlowStepper(props) {
   };
 
 
+  useEffect(() => {
+    const currentStepElement = document.getElementById(`step-${pageStepCounter}`);
+    if (currentStepElement && pageStepCounter != 1 && pageStepCounter != 6) {
+      currentStepElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [pageStepCounter]);
+
   return (
     <ArcherContainer strokeColor="#ccc" strokeWidth={1.5} svgContainerStyle={{ zIndex: 1, marginLeft: "7px" }}>
       <JsonViewerModal isOpen={isModalOpen} onClose={closeModal} jsonData={modalDataArr} modalInfo={modalInfo} modalDesc={modalDesc} modalLink={modalLink} />
 
-      <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '2vh', paddingLeft: '1.5vw' }}>
+      <Grid container columns={{ md: 12 }} spacing={2} sx={{ marginTop: '5vh', paddingLeft: '1.5vw' }}>
 
         <Grid md="5">
           <Card style={{ position: 'relative' }}>
@@ -393,13 +447,243 @@ function workFlowStepper(props) {
             </Typography>
 
             <CardContent>
-
               <Box sx={{ maxWidth: 400 }}>
                 <Stepper orientation="vertical">
                   {steps.map((step, index) => (
                     <>
-                      <Step key={step.label} sx={{ color: 'green' }} index={index > 4 ? index - 5 : index}
-                        completed={index < stepCompleted} active={index === activeStep}>
+                      <Step key={step.label}
+                        id={`step-${step.pStep}`}
+                        sx={{ color: 'green' }}
+                        index={step.pStep}
+                        completed={index < stepCompleted}
+                        active={index === activeStep}>
+                        <StepLabel
+                          StepIconProps={{
+                            classes: {
+                              root: 'StepperIcon',
+                              completed: (step.pStep < pageStepCounter + 3) ? 'StepperIconCompleted' : 'StepperIconInProgress',
+                            }
+                          }}
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'flex-start',
+                            '& .MuiStepLabel-label': {
+                              fontSize: '14px !important',
+                              fontWeight: 'bold !important',
+                              color: '#000000 !important'
+                            }
+                          }}
+
+                        >
+                          {step.label}
+
+                          <img src="/Vector.png" className='infoImageIcon' style={{ marginLeft: '2px' }} />
+
+                          {/* Branch 4 the Onboarding step */}
+                          {step.label === "Initiate Onboarding" ? (
+                            <div style={{ position: 'relative' }}>
+                              {/* First Branch */}
+                              <div style={{ marginLeft: '12px', marginTop: '4px', borderLeft: '1px solid #00000040', height: '0.5vh', position: 'relative' }}></div>
+                              <StepLabel
+                                StepIconProps={{
+                                  classes: {
+                                    root: 'StepperIcon',
+                                    completed: (pageStepCounter === 1) ? 'StepperIconInProgress' : 'StepperIconCompleted',
+                                  }
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span
+                                    className="stepper"
+                                    style={{ color: '#000000', fontWeight: 400, fontSize: '0.875rem' }}
+                                  >
+                                    Redirect Onboarding
+                                  </span>
+                                  <img src="/Vector.png" className='infoImageIcon' style={{ marginLeft: '8px' }} />
+                                  <ArcherElement id={`srcLeftStep2${index}`} relations={leftToRightArrowRelations[`srcLeftStep2${index}`] ? [leftToRightArrowRelations[`srcLeftStep2${index}`]] : []}>
+                                    <div className='leftSideDiv srcDiv'></div>
+                                  </ArcherElement>
+                                  <ArcherElement id={`dstLeftStep2${index}`}>
+                                    <div className='leftSideDiv dstDiv'></div>
+                                  </ArcherElement>
+                                </div>
+                              </StepLabel>
+
+                              {/* Second Branch */}
+                              <div style={{ marginLeft: '12px', borderLeft: '1px solid #00000040', height: '0.8vh', position: 'relative' }}></div>
+                              <StepLabel
+                                StepIconProps={{
+                                  classes: {
+                                    root: 'StepperIcon',
+                                    completed: (pageStepCounter === 1) ? 'StepperIconInProgress' : 'StepperIconCompleted',
+                                  }
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span
+                                    className="stepper"
+                                    style={{ color: '#000000', fontWeight: 400, fontSize: '0.875rem' }}
+                                  >
+                                    Receive Telemetry
+                                  </span>
+                                  <img src="/Vector.png" className='infoImageIcon' style={{ marginLeft: '8px' }} />
+                                  <ArcherElement id={`srcLeftStep3${index}`} relations={leftToRightArrowRelations[`srcLeftStep3${index}`] ? [leftToRightArrowRelations[`srcLeftStep3${index}`]] : []}>
+                                    <div className='leftSideDiv srcDiv'></div>
+                                  </ArcherElement>
+                                  <ArcherElement id={`dstLeftStep3${index}`}>
+                                    <div className='leftSideDiv dstDiv'></div>
+                                  </ArcherElement>
+                                </div>
+                              </StepLabel>
+
+                              {/* Third Branch */}
+                              <div style={{ marginLeft: '12px', borderLeft: '1px solid #00000040', height: '5.5vh', position: 'relative' }}></div>
+                              <StepLabel
+                                StepIconProps={{
+                                  classes: {
+                                    root: 'StepperIcon',
+                                    completed: (pageStepCounter <= 2) ? 'StepperIconInProgress' : 'StepperIconCompleted',
+                                  }
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span
+                                    className="stepper"
+                                    style={{ color: '#000000', fontWeight: 400, fontSize: '0.875rem' }}
+                                  >
+                                    Receive Telemetry
+                                  </span>
+                                  <img src="/Vector.png" className="infoImageIcon" style={{ marginLeft: '4px', verticalAlign: 'middle' }} />
+                                  <ArcherElement id={`srcLeftStep4${index}`} relations={leftToRightArrowRelations[`srcLeftStep4${index}`] ? [leftToRightArrowRelations[`srcLeftStep4${index}`]] : []}>
+                                    <div className='leftSideDiv srcDiv'></div>
+                                  </ArcherElement>
+                                  <ArcherElement id={`dstLeftStep4${index}`}>
+                                    <div className='leftSideDiv dstDiv'></div>
+                                  </ArcherElement>
+                                </div>
+                              </StepLabel>
+
+
+                              {/* Forth Branch */}
+                              <div style={{ marginLeft: '12px', borderLeft: '1px solid #00000040', height: '1.5vh', position: 'relative' }}></div>
+                              <StepLabel
+                                StepIconProps={{
+                                  classes: {
+                                    root: 'StepperIcon',
+                                    completed: (pageStepCounter <= 3) ? 'StepperIconInProgress' : 'StepperIconCompleted',
+                                  }
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span
+                                    className="stepper"
+                                    style={{ color: '#000000', fontWeight: 400, fontSize: '0.875rem' }}
+                                  >
+                                    Back to TS
+                                  </span>
+                                  <img src="/Vector.png" className="infoImageIcon" style={{ marginLeft: '4px', verticalAlign: 'middle' }} />
+                                  <ArcherElement id={`srcLeftStep5${index}`} relations={leftToRightArrowRelations[`srcLeftStep5${index}`] ? [leftToRightArrowRelations[`srcLeftStep5${index}`]] : []}>
+                                    <div className='leftSideDiv srcDiv'></div>
+                                  </ArcherElement>
+                                  <ArcherElement id={`dstLeftStep5${index}`}>
+                                    <div className='leftSideDiv dstDiv'></div>
+                                  </ArcherElement>
+                                </div>
+                              </StepLabel>
+
+
+                              {/* Fifth Branch */}
+                              <div style={{ marginLeft: '12px', borderLeft: '1px solid #00000040', height: '2.7vh', position: 'relative' }}></div>
+                              <StepLabel
+                                StepIconProps={{
+                                  classes: {
+                                    root: 'StepperIcon',
+                                    completed: (pageStepCounter <= 3) ? 'StepperIconInProgress' : 'StepperIconCompleted',
+                                  }
+                                }}
+                              >
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span
+                                    className="stepper"
+                                    style={{ color: '#000000', fontWeight: 400, fontSize: '0.875rem' }}
+                                  >
+                                    Receive Telemetry
+                                  </span>
+                                  <img src="/Vector.png" className="infoImageIcon" style={{ marginLeft: '4px', verticalAlign: 'top' }} />
+                                  <ArcherElement id={`srcLeftStep6${index}`} relations={leftToRightArrowRelations[`srcLeftStep6${index}`] ? [leftToRightArrowRelations[`srcLeftStep6${index}`]] : []}>
+                                    <div className='leftSideDiv srcDiv'></div>
+                                  </ArcherElement>
+                                  <ArcherElement id={`dstLeftStep6${index}`}>
+                                    <div className='leftSideDiv dstDiv'></div>
+                                  </ArcherElement>
+                                </div>
+                              </StepLabel>
+
+
+                            </div>
+                          ) : (
+                            <>
+                              <ArcherElement id={`srcLeftStep${index}`} relations={leftToRightArrowRelations[`srcLeftStep${index}`] ? [leftToRightArrowRelations[`srcLeftStep${index}`]] : []}>
+                                <div className='leftSideDiv srcDiv'></div>
+                              </ArcherElement>
+                              <ArcherElement id={`dstLeftStep${index}`}>
+                                <div className='leftSideDiv dstDiv'></div>
+                              </ArcherElement><br></br>
+                            </>
+                          )}
+
+
+
+                          <div className="subLabel" style={{ fontSize: '14px', marginTop: '4px' }}>
+                            {step.subLabel}
+                          </div>
+                        </StepLabel>
+                      </Step>
+                      {index == 4 ? (
+                        <div style={{ height: '6.5vh' }}>
+                          <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
+                        </div>
+                      ) : index == 6 ? (<div style={{ height: '4vh' }}>
+                        <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
+                      </div>) : (
+                        <div style={{ height: '4vh' }}>
+                          <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
+                        </div>
+                      )}
+                    </>
+                  ))}
+
+
+
+                  <div style={{ height: '50px', position: 'relative', display: 'inline-block' }}>
+                    <StepConnector classes={{ line: 'full-lines' }} style={{ height: '30vh' }} />
+                  </div>
+
+
+                  <div style={{ position: 'relative' }}>
+                    <Step completed={isFinalPage} index={0}>
+                      <StepLabel
+                        StepIconProps={{
+                          classes: {
+                            root: 'StepperIcon',
+                            completed: 'StepperIconCompleted',
+                          }
+                        }}
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'flex-start',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <span style={{ color: '#000000', fontWeight: 'bold', fontSize: '14px !important' }}>
+                            Notify
+                          </span>
+                        </div>
+
+                        <div style={{ marginLeft: '12px', marginTop: '4px', borderLeft: '1px solid #00000040', height: '17px', position: 'relative' }}></div>
+
                         <StepLabel
                           StepIconProps={{
                             classes: {
@@ -408,95 +692,85 @@ function workFlowStepper(props) {
                             }
                           }}
                         >
-                          {step.label}
-
-                          <img src="/Vector.png" className='infoImageIcon'>
-                          </img>
-                          <ArcherElement id={`srcLeftStep${index}`} relations={leftToRightArrowRelations[`srcLeftStep${index}`] ? [leftToRightArrowRelations[`srcLeftStep${index}`]] : []}>
-                            <div className='leftSideDiv srcDiv'></div>
-                          </ArcherElement>
-                          <ArcherElement id={`dstLeftStep${index}`}>
-                            <div className='leftSideDiv dstDiv'></div>
-                          </ArcherElement><br></br>
-                          <div className="subLabel" style={{ fontSize: '12px', marginTop: '4px' }}>
-                            {step.subLabel}
+                          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '0px' }}> {/* Adjusted margin */}
+                            <span
+                              className="stepper-link"
+                              style={{ color: isFinalPage ? 'blue' : '#000000', fontWeight: 400, fontSize: '0.875rem' }}
+                              onClick={() => { openModal('notify') }}
+                            >
+                              Notify end users
+                            </span>
+                            <img src="/Vector.png" className='infoImageIcon' style={{ marginLeft: '8px' }} />
+                            <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
+                              <div className='leftSideDiv srcDiv'></div>
+                            </ArcherElement>
+                            <ArcherElement id={`dstLeftStep${lStepIndex}`}>
+                              <div className='leftSideDiv dstDiv'></div>
+                            </ArcherElement>
                           </div>
                         </StepLabel>
-                      </Step>
-                      {index == 4 && <div style={{ height: '125px' }}>
-                        <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
-                      </div>}
-                    </>
-                  ))}
-                  <div style={{ height: '8px', position: 'relative', display: 'inline-block' }}>
-                    <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
-                  </div>
-                  <div style={{ position: 'relative' }}>
-                    <Step
-                      completed={isFinalPage}
-                      index={0}
-                    >
+
+                        <div style={{ marginLeft: '12px', borderLeft: '1px solid #00000040', height: '17px', position: 'relative' }}></div>
+
+
+                        <StepLabel
+                          StepIconProps={{
+                            classes: {
+                              root: 'StepperIcon',
+                              completed: 'StepperIconCompleted',
+                            }
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <span
+                              className="stepper-link"
+                              style={{ color: isFinalPage ? 'blue' : '#000000', fontWeight: 400, fontSize: '0.875rem' }}
+                              onClick={() => { openModal('gtm') }}
+                            >
+                              Notify Acme GTM Team
+                            </span>
+                            <img src="/Vector.png" className='infoImageIcon' style={{ marginLeft: '8px' }} />
+                            <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
+                              <div className='leftSideDiv srcDiv'></div>
+                            </ArcherElement>
+                            <ArcherElement id={`dstLeftStep${lStepIndex}`}>
+                              <div className='leftSideDiv dstDiv'></div>
+                            </ArcherElement>
+                          </div>
+                        </StepLabel>
+
+                        <PreviewModal isOpen={isPrevModalOpen && modalUser === 'notify'} onClose={closePrevModel} user="notify" />
+                        <PreviewModal isOpen={isPrevModalOpen && modalUser === 'gtm'} onClose={closePrevModel} user="gtm" />
+
+                      </StepLabel>
+                    </Step>
+
+
+
+
+
+
+                    <div style={{ height: '11vh', position: 'relative', display: 'inline-block' }}>
+                      <StepConnector classes={{ root: 'line-parent-3', line: 'full-lines' }} />
+                    </div>
+
+
+
+
+
+                    <Step completed={isFinalPage} index={0} id='step-6'>
                       <StepLabel
-                        onClick={() => { openModal('notify') }}
                         StepIconProps={{
                           classes: {
                             root: 'StepperIcon',
                             completed: 'StepperIconCompleted',
                           }
                         }}
-                      >
-                        <span style={{ color: isFinalPage ? 'blue' : '#00000099', fontWeight: 400, fontSize: '0.875rem' }} className="stepper-link" >Notify end users</span>
-                        <img src="/Vector.png" className='infoImageIcon'>
-                        </img>
-                        <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
-                          <div className='leftSideDiv srcDiv'></div>
-                        </ArcherElement>
-                        <ArcherElement id={`dstLeftStep${lStepIndex}`}>
-                          <div className='leftSideDiv dstDiv'></div>
-                        </ArcherElement>
-                      </StepLabel>
-                      <PreviewModal isOpen={isPrevModalOpen && modalUser === 'notify'} onClose={closePrevModel} user="notify" />
-                    </Step>
-                    <div style={{ height: '8px', position: 'relative', display: 'inline-block' }}>
-                      <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
-                    </div>
-                    <Step
-                      completed={isFinalPage}
-                      index={0}
-                    >
-                      <StepLabel
-                        style={{ color: 'blue' }}
-                        StepIconProps={{
-                          classes: {
-                            root: 'StepperIcon',
-                            completed: 'StepperIconCompleted',
-                          }
-                        }}
-                        completed={true}
-                        index={0}
-                        onClick={() => { openModal('gtm') }}
-                      >
-                        <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : '#00000099', fontWeight: 400, fontSize: '0.875rem' }}>Notify Acme GTM team</span>
-                        <img src="/Vector.png" className='infoImageIcon'>
-                        </img>
-                        <ArcherElement id={`srcLeftStep${++lStepIndex}`} relations={leftToRightArrowRelations[`srcLeftStep${lStepIndex}`] ? [leftToRightArrowRelations[`srcLeftStep${lStepIndex}`]] : []}>
-                          <div className='leftSideDiv srcDiv'></div>
-                        </ArcherElement>
-                        <ArcherElement id={`dstLeftStep${lStepIndex}`}>
-                          <div className='leftSideDiv dstDiv'></div>
-                        </ArcherElement>
-                      </StepLabel>
-                      <PreviewModal isOpen={isPrevModalOpen && modalUser === 'gtm'} onClose={closePrevModel} user="gtm" />
-                    </Step>
-                    <div style={{ height: '8px', position: 'relative', display: 'inline-block' }}>
-                      <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
-                    </div>
-                    <Step completed={isFinalPage} index={0}>
-                      <StepLabel
-                        StepIconProps={{
-                          classes: {
-                            root: 'StepperIcon',
-                            completed: 'StepperIconCompleted',
+                        sx={{
+                          '& .MuiStepLabel-label': {
+                            fontSize: '14px !important',
+                            fontWeight: 'bold !important',
+                            color: '#000000 !important'
                           }
                         }}
                         completed={isFinalPage}
@@ -512,18 +786,68 @@ function workFlowStepper(props) {
                         </ArcherElement>
                       </StepLabel>
                     </Step>
-                    <Step completed={isFinalPage}>
+
+
+                    <div style={{ height: '30px', position: 'relative', display: 'inline-block' }}>
+                      <StepConnector classes={{ line: 'full-lines' }} style={{ height: '4vh' }} />
+                    </div>
+
+
+                    <Step completed={isFinalPage} index={0}>
                       <StepLabel
-                        icon={
-                          <img src={isFinalPage ? '/unlock.png' : '/lock.png'} style={{ marginLeft: '7px', fontSize: 'small', height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img>
-                        }
-                        completed={true}
-                        index={0}
+                        StepIconProps={{
+                          classes: {
+                            root: 'StepperIcon',
+                            completed: 'StepperIconCompleted',
+                          }
+                        }}
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'flex-start',
+                        }}
                       >
-                        PLG CRM and Analytics unlocked <br />
-                        {isFinalPage && <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : 'black' }}>Link to these pages</span>}
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <span style={{ color: 'black', fontWeight: 500, fontSize: '1rem' }}>
+                            Features Unlocked
+                          </span>
+                        </div>
+
+                        <div style={{ marginLeft: '12px', marginTop: '4px', borderLeft: '1px solid #00000040', height: '17px', position: 'relative' }}></div>
+
+                        <StepLabel
+                          icon={
+                            <img src={isFinalPage ? '/unlock.png' : '/lock.png'} style={{ marginLeft: '7px', fontSize: 'small', height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img>
+                          }
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '0px' }}>
+                            <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : '#000000', fontWeight: 400, fontSize: '0.875rem' }}>
+                              Go to PLG CRM
+
+                            </span>
+                            <img src="/Vector.png" className='infoImageIcon' style={{ marginLeft: '8px' }} />
+                          </div>
+                        </StepLabel>
+
+                        <div style={{ marginLeft: '12px', borderLeft: '1px solid #00000040', height: '17px', position: 'relative' }}></div>
+
+
+                        <StepLabel
+                          icon={
+                            <img src={isFinalPage ? '/unlock.png' : '/lock.png'} style={{ marginLeft: '7px', fontSize: 'small', height: '1vw', padding: '0% 1%', marginTop: '-1%' }}></img>
+                          }
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <span className="stepper-link" style={{ color: isFinalPage ? 'blue' : '#000000', fontWeight: 400, fontSize: '0.875rem' }}>
+                              Go to Analytics
+                            </span>
+                            <img src="/Vector.png" className='infoImageIcon' style={{ marginLeft: '8px' }} />
+                          </div>
+                        </StepLabel>
+
                       </StepLabel>
                     </Step>
+
                   </div>
                 </Stepper>
               </Box>
@@ -555,42 +879,44 @@ function workFlowStepper(props) {
                   <div className='rightSideDiv dstDiv'></div>
                 </ArcherElement>
                 <Step index={0}>
-                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155', marginBottom: '0vw' } }}
-                    icon={<img src="/account_circle.png" style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img>}>End User</StepLabel>
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { fontSize: '14px', fontWeight: 'bold', color: '#000000', marginBottom: '0vw' } }}
+                    icon={<img src="/account_circle.png" style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img>}>Authenticated End User</StepLabel>
                 </Step>
                 <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                   <div className='rightSideDiv srcDiv'></div>
                 </ArcherElement>
               </div>
 
-              <div className='default-box' style={{ height: '30px' }}>
-                <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
+              <div className='default-box' style={{ height: '1.5vh' }}>
+                <StepConnector classes={{ root: 'line-parent-3', line: 'full-lines' }} />
               </div>
 
 
               <div className={`default-box ${(pageStepCounter == 0) ? 'arrow-box' : 'color-box'}`} id="enrichment-box">
                 <Step index={0}>
-                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { fontSize: '14px', fontWeight: 'bold', color: '#000000' } }}
                     icon={<>
                       <ArcherElement id={`dstRightStep${++rStepIndex}`}>
                         <div className='rightSideDiv dstDiv'></div>
                       </ArcherElement>
                       <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                         <div className='rightSideDiv srcDiv'></div>
-                      </ArcherElement><img src={(pageStepCounter > 0) ? step_complete_img : (pageStepCounter == 0 ? step_in_progress_img : step_default_img)} style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Enrichment </StepLabel>
+                      </ArcherElement><img src={(pageStepCounter > 0) ? step_complete_img : (pageStepCounter == 0 ? step_in_progress_img : step_default_img)} style={{ height: '1.4vw', padding: '0% 1%', marginTop: '-1%' }}></img>
+                    </>}
+                  >Recieve Enrichment Data</StepLabel>
                 </Step>
               </div>
 
 
-              <div className='default-box' style={{ height: '45px' }}>
+              <div className='default-box' style={{ height: '18vh' }}>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
 
 
-              <div className={`default-box ${(pageStepCounter == 1 || pageStepCounter == 2) ? 'arrow-box' : 'color-box'}`} id="onboarding-box">
-                <span style={{ fontSize: '16px', fontWeight: '400', color: '#cfad56' }}>Onboarding</span>
+              <div className={`default-box ${(pageStepCounter == 1 || pageStepCounter == 2) ? 'arrow-box' : 'color-box'}`} style={{ paddingTop: '1vh', }} id="onboarding-box">
+                <div style={{ fontSize: '16px', fontWeight: '600', color: '#cfad56', marginBottom: '1.5vh' }}>Onboarding</div>
                 <Step index={0}>
-                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155', borderColor: 'transparent' } }}
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#000000', borderColor: 'transparent', fontWeight: '600' } }}
                     icon={
                       <>
                         <ArcherElement id={`dstRightStep${++rStepIndex}`}>
@@ -601,14 +927,43 @@ function workFlowStepper(props) {
                         </ArcherElement>
                         <img
                           src={pageStepCounter > 1 ? step_complete_img : (pageStepCounter == 1 ? step_in_progress_img : step_default_img)}
-                          style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}
+                          style={{ height: '1.2vw', padding: '0% 1%', marginTop: '-1%' }}
                           className='infoImageIcon'></img>
                       </>
-                    }>Step 1</StepLabel>
+                    }>
+
+                    Step 1
+                  </StepLabel>
+
+                  {/* <div style={{ marginLeft: '12px', marginTop: '4px', borderLeft: '1px solid #00000040', height: '17px', position: 'relative' }}></div> */}
+                  <div style={{ paddingLeft: '20px', marginTop: '0px' }}>
+                    <Step>
+                      <StepConnector classes={{ line: 'full-lines-2' }} style={{ height: '0.8vh' }} />
+                      <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#000000', fontSize: '11px' } }}
+                        icon={
+                          <>
+                            <ArcherElement id={`dstRightStep${++rStepIndex}`}>
+                              <div className='rightSideDiv dstDiv'></div>
+                            </ArcherElement>
+                            <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
+                              <div className='rightSideDiv srcDiv'></div>
+                            </ArcherElement>
+                            <img
+                              src={pageStepCounter > 1 ? step_complete_img : (pageStepCounter == 1 ? step_in_progress_img : step_default_img)}
+                              style={{ height: '0.8vw', padding: '0% 1%', marginTop: '-1%' }}
+                              className='infoImageIcon'></img>
+                          </>
+                        }>
+                        Send Telemetry
+                      </StepLabel>
+                    </Step>
+
+                  </div>
 
                 </Step>
+                <StepConnector classes={{ line: 'full-lines' }} style={{ height: '1.6vh' }} />
                 <Step>
-                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#000000', fontWeight: '600' } }}
                     icon={
                       <>
                         <ArcherElement id={`dstRightStep${++rStepIndex}`}>
@@ -617,53 +972,138 @@ function workFlowStepper(props) {
                         <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                           <div className='rightSideDiv srcDiv'></div>
                         </ArcherElement>
-                        <img src={pageStepCounter > 2 ? step_complete_img : (pageStepCounter == 2 ? step_in_progress_img : step_default_img)}
-                          style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img>
+                        <img
+                          src={pageStepCounter > 2 ? step_complete_img : (pageStepCounter == 2 ? step_in_progress_img : step_default_img)}
+                          style={{ height: '1.2vw', padding: '0% 1%', marginTop: '-1%' }}
+                          className='infoImageIcon'></img>
                       </>
-                    }>Step 2</StepLabel>
+                    }>Step 2
+                  </StepLabel>
+
+                  <div style={{ paddingLeft: '20px', marginTop: '-2px' }}>
+                    <Step>
+                      <StepConnector classes={{ line: 'full-lines' }} style={{ height: '0.8vh' }} />
+
+                      <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#000000', fontSize: '11px' } }}
+                        icon={
+                          <>
+                            <ArcherElement id={`dstRightStep${++rStepIndex}`}>
+                              <div className='rightSideDiv dstDiv'></div>
+                            </ArcherElement>
+                            <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
+                              <div className='rightSideDiv srcDiv'></div>
+                            </ArcherElement>
+                            <img
+                              src={pageStepCounter > 2 ? step_complete_img : (pageStepCounter == 2 ? step_in_progress_img : step_default_img)}
+                              style={{ height: '0.8vw', padding: '0% 1%', marginTop: '-1%' }}
+                              className='infoImageIcon'></img>
+                          </>
+                        }>
+                        Send Telemetry
+                      </StepLabel>
+                    </Step>
+
+                  </div>
+                </Step>
+                <StepConnector classes={{ line: 'full-lines' }} style={{ height: '1.6vh' }} />
+                <Step>
+                  <StepLabel
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'flex-start',
+                      '& .MuiStepLabel-label': { color: '#000000', fontWeight: '600', textWrap: false }
+                    }}
+                    icon={
+                      <>
+                        <ArcherElement id={`dstRightStep${++rStepIndex}`}>
+                          <div className='rightSideDiv dstDiv'></div>
+                        </ArcherElement>
+                        <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
+                          <div className='rightSideDiv srcDiv'></div>
+                        </ArcherElement>
+                        <img
+                          src={pageStepCounter > 3 ? step_complete_img : (pageStepCounter == 3 ? step_in_progress_img : step_default_img)}
+                          style={{ height: '1.2vw', padding: '0% 1%', marginTop: '-1%' }}
+                          className='infoImageIcon'></img>
+                      </>
+                    }>Onboarding Complete</StepLabel>
+
+                  <div style={{ paddingLeft: '20px', marginTop: '-2px' }}>
+                    <Step>
+                      <StepConnector classes={{ line: 'full-lines' }} style={{ height: '0.8vh' }} />
+
+                      <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#000000', fontSize: '11px' } }}
+                        icon={
+                          <>
+                            <ArcherElement id={`dstRightStep${++rStepIndex}`}>
+                              <div className='rightSideDiv dstDiv'></div>
+                            </ArcherElement>
+                            <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
+                              <div className='rightSideDiv srcDiv'></div>
+                            </ArcherElement>
+                            <img
+                              src={pageStepCounter > 3 ? step_complete_img : (pageStepCounter == 3 ? step_in_progress_img : step_default_img)}
+                              style={{ height: '0.8vw', padding: '0% 1%', marginTop: '-1%' }}
+                              className='infoImageIcon'></img>
+                          </>
+                        }>
+                        Send Telemetry
+                      </StepLabel>
+                    </Step>
+
+                  </div>
                 </Step>
               </div>
               <div className='default-box'>
-                <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
+                <StepConnector classes={{ line: 'full-lines' }} style={{ height: '14.5vh' }} />
               </div>
 
-              <div className='default-box color-box info-box' >
-                Starting workspace creation
-              </div>
-              <div className='default-box'>
-                <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
-              </div>
+
               <div className={'default-box color-box'} id="provision-box">
                 <Step index={0}>
-                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { fontSize: '14px', fontWeight: 'bold', color: '#000000' } }}
+                    icon={<>
+                      <ArcherElement id={`dstRightStep${++rStepIndex}`}>
+
+                        <div className='rightSideDiv dstDiv'></div>
+                      </ArcherElement>
+                      <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
+                        <div className='rightSideDiv srcDiv'></div>
+                      </ArcherElement><img src={(pageStepCounter == 4) ? step_complete_img : (pageStepCounter == 3 ? step_in_progress_img : step_default_img)} style={{ height: '1.2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Start tenant provisioning </StepLabel>
+                </Step>
+              </div>
+
+
+              <div className='default-box'>
+                <StepConnector classes={{ line: 'full-lines' }} style={{ height: '1.3vh' }} />
+              </div>
+
+              <div className={'default-box color-box'} id="provision-box">
+                <Step index={0}>
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { fontSize: '14px', fontWeight: 'bold', color: '#000000' } }}
                     icon={<>
                       <ArcherElement id={`dstRightStep${++rStepIndex}`}>
                         <div className='rightSideDiv dstDiv'></div>
                       </ArcherElement>
                       <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                         <div className='rightSideDiv srcDiv'></div>
-                      </ArcherElement><img src={(pageStepCounter == 4) ? step_complete_img : (pageStepCounter == 3 ? step_in_progress_img : step_default_img)} style={{ height: '2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Provision tenant </StepLabel>
+                      </ArcherElement><img src={(pageStepCounter == 4) ? step_complete_img : (pageStepCounter == 3 ? step_in_progress_img : step_default_img)} style={{ height: '1.2vw', padding: '0% 1%', marginTop: '-1%' }}></img></>}>Complete Tenant Provision </StepLabel>
                 </Step>
               </div>
-              <div className='default-box'>
-                <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
-              </div>
-              <div className='default-box color-box info-box' >
-                Workspace creation ended
-              </div>
-              <div className='default-box' style={{ height: '175px' }}>
+              <div className='default-box' style={{ height: '53vh' }}>
                 <StepConnector classes={{ root: 'line-parent', line: 'full-lines' }} />
               </div>
               <div className={`default-box ${(pageStepCounter >= 4) ? 'arrow-box' : 'color-box'}`} id="home-box">
-                <Step sx={{ color: 'green' }} index={0}>
-                  <StepLabel sx={{ '& .MuiStepLabel-label': { color: '#334155' } }}
+                <Step sx={{ color: 'green' }} index={0} id='step-4'>
+                  <StepLabel sx={{ '& .MuiStepLabel-label': { fontSize: '14px', fontWeight: 'bold', color: '#000000' } }}
                     icon={<>
                       <ArcherElement id={`dstRightStep${++rStepIndex}`}>
                         <div className='rightSideDiv dstDiv'></div>
                       </ArcherElement>
                       <ArcherElement id={`srcRightStep${rStepIndex}`} relations={rightToLeftArrowRelations[`srcRightStep${rStepIndex}`] ? [rightToLeftArrowRelations[`srcRightStep${rStepIndex}`]] : []}>
                         <div className='rightSideDiv srcDiv'></div>
-                      </ArcherElement><img src="/home.png" style={{ height: '1.5vw', padding: '0% 1%', marginTop: '-1%' }}></img></>} >Product Home  </StepLabel>
+                      </ArcherElement><img src="/home.png" style={{ height: '1.3vw', padding: '0% 1%', marginTop: '-1%' }}></img></>} >Product Home  </StepLabel>
                 </Step>
               </div>
             </Stepper>

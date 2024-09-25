@@ -7,9 +7,11 @@ export const textConstants = {
 
   ONBOARDING_PAGE_ONE_STEP_ONE_HEADING:
     "Here’s a simulation of your app’s onboarding steps, showcasing a multi-step process. With self-serve telemetry, your app can log events for each step (e.g., started, completed), enabling your Growth teams to track success and drop-offs using",
-  ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE: "Your SaaS Product’s Application Onboarding",
-  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE: "will be navigated to Onboarding after ThriveStack completes the steps as listed in the left pane. This page is an",
-  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2:"page of self-serve onboarding within your product. ThriveStack needs a page URL to redirect to. This page will receive data that can be used to ",
+  ONBOARDIG_PAGE_ONE_STEP_ONE_TITLE: "Simulation of your Product's Onboarding",
+  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE: "will be navigated to",
+  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE2: "after ThriveStack completes the steps as listed in the left pane. This page is an",
+  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE3:"page of self-serve onboarding within ",
+  ONBOARDING_PAGE_ONE_STEP_SUB_TITLE4:" ThriveStack needs a page URL to redirect to. This page will receive data that can be used to ",
   ONBOARDING_PAGE_TWO_TITLE: "Acme Labs Onboarding For End-user",
   ONBOARDING_PAGE_TWO_DESCRIPTION_ONE:
     "Imagine this page as your product's onboarding page, which your end-users see once their authentication is completed. Typically, you want your end-users to fill out the onboarding form, as shown below. You can enable this by simply configuring the onboarding page URL in Thrivestack's Workflow builder (Signup Workflow).",
@@ -36,6 +38,7 @@ export const textConstants = {
   CONCLUSION_PAGE_VERIFY_TEXT2: "Email received for Acme GTM Team on john@acmelabs.com",
   CONCLUSION_PAGE_VERIFY_DESC: "Thrivestack and Acme Labs self serve integration is complete",
   CONCLUSION_PAGE_VERIFY_DESC_TWO: "Checkout the Github repository for the entire code base here:",
+  CONCLUSION_PAGE_VERIFY_INFO_HEADING: "This page simulates your product's homepage.",
   CONCLUSION_PAGE_VERIFY_INFO : "New User Signup Notifications have been sent out",
   CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE: "Welcome email notification sent to the signed up end-user on",
   CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO: "Notification to ACME’s GTM sent to ",
@@ -57,6 +60,7 @@ export const textConstants = {
   TENANT_LIST_PAGE_DESC: `This page serves as a simulation of your backend system's response to tenant creation requests originating from ThriveStack`,
   TENANT_LIST_PAGE_DESC_TWO: `It's important to note that end-users won't have visibility of this page. This simulation provides an experience for testing your backend system.`,
 
+  
   WORKFLOW_PAGE_TITLE: "How Thrivestack integrates with Acme Labs (Your SaaS Product)",
   WORKFLOW_PAGE_DESC: "Self-serve orchestration between your app and Thrivestack",
   WORKFLOW_STEPPER_TITLE: "Thrivestack",
