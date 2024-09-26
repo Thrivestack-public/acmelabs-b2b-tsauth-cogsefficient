@@ -264,29 +264,35 @@ function workFlowStepper(props) {
   const [modalLink, setModalLink] = useState('')
 
 
-  useEffect(async () => {
-    if (isFirstPage) {
-      if (authOTP) {
-        const authApiResponse = await fetchValidateAuth(authOTP);
-        const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
-        localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFirstPage) {
+        if (authOTP) {
+          const authApiResponse = await fetchValidateAuth(authOTP);
+          const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
+          localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
+        }
       }
-    }
 
-    if (isFinalPage) {
-      if (authOTP) {
-        const authApiResponse = await fetchValidateAuth(authOTP);
-        const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
-        const emailId = authApiResponseJson.emailId;
-        setUserEmail(emailId);
-        localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
+      if (isFinalPage) {
+        if (authOTP) {
+          const authApiResponse = await fetchValidateAuth(authOTP);
+          const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
+          const emailId = authApiResponseJson.emailId;
+          setUserEmail(emailId);
+          localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
+        }
       }
-    }
+      const tenantApiResponse = await fetchTenantData(workflowRuntimeId, 'tenant_creation');
+      localStorage.setItem("tenantData", JSON.stringify(tenantApiResponse));
+    };
+
+    fetchData();
   }, []);
 
+
   useEffect(async () => {
-    const tenantApiResponse = await fetchTenantData(workflowRuntimeId, 'tenant_creation');
-    localStorage.setItem("tenantData", JSON.stringify(tenantApiResponse));
+
   }, []);
 
   async function getTenantData() {
@@ -316,9 +322,7 @@ function workFlowStepper(props) {
       console.log("LocalStorage Auth DATA: ", ls)
       if (ls) {
         apiResponse = JSON.parse(ls)
-        console.log("API respponseINSIDE: ", apiResponse)
       }
-      console.log("API respponseOUT: ", apiResponse)
 
       setModalDataArr([{
         JsonData: apiResponse,

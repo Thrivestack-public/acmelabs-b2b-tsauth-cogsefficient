@@ -62,7 +62,7 @@ export const textConstants = {
 
   
   WORKFLOW_PAGE_TITLE: "How Thrivestack integrates with Acme Labs (Your SaaS Product)",
-  WORKFLOW_PAGE_DESC: "Self-serve orchestration between your app and Thrivestack",
+  WORKFLOW_PAGE_DESC: "Self-serve orchestration between your app and ThriveStack",
   WORKFLOW_STEPPER_TITLE: "Thrivestack",
   WORKFLOW_STEPPER_SUBTITLE: "*Works in the background",
   WORKFLOW_STEPPER_SUBTITLE_2: "*Your SaaS Product",

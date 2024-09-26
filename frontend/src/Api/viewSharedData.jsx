@@ -86,6 +86,8 @@ async function getEnrichmentData() {
 
         const email = (tokenJson)["emailId"]
 
+        console.log("tokenJSON & email", tokenJson, email)
+
         const params = {
             productId: 'f01334c6-f726-11ee-bd2a-e60358d08e04',
             emailId: email
@@ -108,7 +110,8 @@ async function getEnrichmentData() {
 
             const data = await response.json()
             localStorage.setItem("enrichmentData", JSON.stringify(data))
-            return (localStorage.getItem("enrichmentData"))
+            console.log(localStorage.getItem("enrichmentData"))
+            return(localStorage.getItem("enrichmentData"))
             
 
 
