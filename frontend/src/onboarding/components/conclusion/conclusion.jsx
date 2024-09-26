@@ -53,42 +53,39 @@ function conclusion() {
     }, []);
 
     return (
-        <div container className='conclusion-heading' >
-            <Box className='cardBg'>
+        <div container className='conclusion-heading'>
+
+            <Box className='flex cardBg' style={{ paddingTop: '0vh !important' }}>
+                <div
+                    style={{
+                        backgroundColor: '#dae6f5',
+                        color: '#333',
+                        fontWeight: 'bold',
+                        fontSize: '17px',
+                        textAlign: 'center',
+                        marginBottom: '10px',
+                    }}
+                >
+                    {textConstants.WORKFLOW_PAGE_BANNER_RIGHT}
+                </div>
                 {showGratification && (
                     <Confetti id='confetti-test' style={{ marginLeft: '45%' }} width={width * 0.55} />
                 )}
-                <ArcherContainer strokeColor='#94A3B8' className='archer-body'>
-                    <ArcherElement
-                        id="image1" Typography
-                        relations={[
-                            {
-                                targetId: 'image2',
-                                targetAnchor: 'left',
-                                sourceAnchor: 'right',
-                                style: { startMarker: true, stroke: '#94A3B8', strokeWidth: 1, lineStyle: 'straight' }
-                            }
-                        ]}
-                    >
-                        <img src="/thrive.png" alt="Image 1" className='thrive-img' />
-                    </ArcherElement>
 
-                    <ArcherElement id="image2">
-                        <img src="/acme.png" alt="Image 2" className='acme-img' />
-                    </ArcherElement>
-                </ArcherContainer>
-                <span className='card-header'>Congratulations!</span> <br />
-                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC}</span> <br />
-                <span className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}</span><span fontSize={"x-small"}> {``}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient">Github repo</a>{``}</span>
+                <div className='card-header' style={{ fontSize: '5vh' }}>Congratulations!</div> <br />
+                <div className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC}</div> <br />
+                <div className='card-subHeader' style={{ marginBottom: '50px' }}>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}{` `}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient" target='_blank'>Github repo</a>{``}</div> <br />
+
+                
             </Box>
             <div className='div-font' style={{ paddingLeft: '6%' }}>
 
                 <span className='conclusion-li-heading'>{textConstants.CONCLUSION_PAGE_VERIFY_INFO}:</span>
                 <ol type='number' style={{ paddingInlineStart: '15px', fontSize: "16px" }}>
-                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE} <span style={{ fontWeight: '500', fontSize: "16px" }}>&lt;{userEmail}&gt;</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>how to customize it.</li>
-                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO} <span style={{ fontWeight: '500', fontSize: "16px" }}>&lt;GTM@acmelabs.com&gt;.</span><span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>  on how to configure it.</li>
+                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_ONE} <span style={{ fontWeight: '500', fontSize: "16px" }}>{userEmail}</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}>Learn more </span>how to customize it.</li>
+                    <li>{textConstants.CONCLUSION_PAGE_VERIFY_INFO_STEP_TWO} <span style={{ fontWeight: '500', fontSize: "16px" }}>{userEmail}</span>. <span style={{ fontWeight: '500', fontSize: "16px", color: 'blue' }}> Learn more </span>  on how to configure it.</li>
                 </ol>
-                <Card style={{ paddingLeft: '28px' }}>
+                <Card style={{ paddingLeft: '28px', paddingBottom: '2vh', marginTop: '6vh' }}>
                     <Grid container spacing={2} columns={12} >
                         <Grid item md={6}>
                             <p style={{ fontWeight: '500', fontSize: 'x-large' }}>{textConstants.CONCLUSION_PAGE_CARD_TEXT}</p>

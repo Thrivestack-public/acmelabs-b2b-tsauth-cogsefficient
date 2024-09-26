@@ -14,6 +14,8 @@ const OnboardingComponent = lazy(() => import("./onboarding/components/Main"));
 const UserManagement = lazy(() => import("./userManagement/Main"));
 const TenantAdminComponent = lazy(() => import("./tenantDashboard/components/Main"));
 const SigUp = lazy(() => import("./SignUp/SigUp"));
+const OnboardingComponentNew = lazy(() => import("./onboarding/components/Main"));
+
 function App() {
   return (
     <BrowserRouter>
@@ -29,6 +31,9 @@ function App() {
               </Route>
               <Route path="/on-boarding">
                 <OnboardingComponent />
+              </Route>
+              <Route path="/test">
+                <OnboardingComponentNew />
               </Route>
               <Route path="/user-management">
                 <UserManagement />

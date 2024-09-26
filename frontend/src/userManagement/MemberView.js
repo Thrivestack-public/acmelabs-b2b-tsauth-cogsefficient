@@ -57,7 +57,7 @@ export default function MemberView() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`https://api.dev.app.thrivestack.ai/api/user/list`, {
+                const response = await fetch(`https://api.app.thrivestack.ai/api/user/list`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -90,7 +90,7 @@ export default function MemberView() {
     useEffect(() => {
         const fetchRoleData = async () => {
             try {
-                const additionalResponse = await fetch(`https://api.dev.app.thrivestack.ai/api/user/roles`, {
+                const additionalResponse = await fetch(`https://api.app.thrivestack.ai/api/user/roles`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -156,11 +156,11 @@ export default function MemberView() {
     const updateUserData = async (user) => {
         try {
             setLoading(true);
-            const response = await fetch(`https://api.dev.app.thrivestack.ai/api/user/update`, {
+            const response = await fetch(`https://api.app.thrivestack.ai/api/user/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("TSManagementToken")}`
+                    "": `Bearer ${localStorage.getItem("TSManagementToken")}`
                 },
                 body: JSON.stringify({
                     user_id: user.user_id,

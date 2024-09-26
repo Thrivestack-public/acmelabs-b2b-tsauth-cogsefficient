@@ -4,7 +4,8 @@ import {
   TextField, Button, Box,
   Snackbar,
   Alert,
-  Typography
+  Typography,
+  Grid
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
@@ -14,11 +15,19 @@ const styles = (theme) => ({
   formContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: theme.spacing(2),
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    textAlign: "flex-start",
-    maxWidth: 400,
+    gap: theme.spacing(3),
+    padding: theme.spacing(6),
+    paddingTop: theme.spacing(6), //  top padding
+    paddingBottom: theme.spacing(1),
+    borderRadius: "12px",
+    border: "1px solid #e0e0e0",
+    maxWidth: "1000px",
+    backgroundColor: "#ffffff",
+    margin: "0 auto",
+    alignItems: "center",
+    width: "100%", 
+    maxWidth: "800px",
+    minWidth: "600px",
   },
   successContainer: {
     display: "flex",
@@ -36,6 +45,25 @@ const styles = (theme) => ({
     textAlign: "left",
     marginBottom: "12px",
   },
+  button: {
+    backgroundColor: "#5D2A6D",
+    color: "#fff",
+    padding: theme.spacing(1.5, 3),
+    fontSize: "16px",
+    borderRadius: "8px",
+    "&:hover": {
+      backgroundColor: "#482073",
+    },
+    "&:disabled": {
+      backgroundColor: "#9a82bd",
+    },
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    marginTop: theme.spacing(2),
+  },
 });
 
 const OrganizationOnboardingForm = (props) => {
@@ -45,8 +73,7 @@ const OrganizationOnboardingForm = (props) => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false
-  );
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -116,13 +143,14 @@ const OrganizationOnboardingForm = (props) => {
     setPageStepCounter(3);
     setStepCompleted(5);
     return (
-      <>
+      <Grid>
         <Box className={classes.successContainer}>
           <Typography
             fontSize={["20px", "24px", "32px"]}
             fontWeight={400}
+            marginBottom={"1vh"}
           >
-            Congratulations!
+            Onboarding complete.
           </Typography>
           <Typography
             fontSize={["12px", "15px", "17px"]}
@@ -135,44 +163,60 @@ const OrganizationOnboardingForm = (props) => {
 
           <Typography
             variant="p"
-            fontSize={["10px", "12px", "14px"]}
+            fontSize={["12px", "15px", "17px"]}
             fontWeight={400}
           >
             {textConstants.ONBOARDING_PAGE_TWO_SUCCESS_DESC_TWO}
           </Typography>
 
-          <Typography variant="p" fontSize={["11px", "13px", "15px"]}>
+          <Typography variant="p" fontSize={["12px", "15px", "17px"]}>
             {textConstants.ONBOARDING_PAGE_TWO_SUCCESS_RETURN_URL}
           </Typography>
 
-          <Box marginBottom={"5vh"}>
+          <Box marginTop={"2vh"} marginBottom={"5vh"}>
 
             <CopyTextField text={onboardingMetaData.returnUrl + "&workflowId=" + onboardingMetaData.workflowId + "&runtimeId=" +
               onboardingMetaData.runtimeId} />
           </Box>
 
         </Box>
-        <Box>
-          <a sx={{ marginTop: "5vh" }}
+        <Box
+          sx={{ 
+            display: 'flex',     
+            justifyContent: 'left',  
+            alignItems: 'center',      
+            width: '100%',           
+          }}
+        >
+          <a sx={{ 
+            marginTop: "5vh",
+            display: 'flex',
+            alignItems: 'center'
+           }}
             href={onboardingMetaData.returnUrl +
               "&workflowId=" +
               onboardingMetaData.workflowId +
               "&runtimeId=" +
               onboardingMetaData.runtimeId}
           >
-            <Button variant="contained" sx={{ textTransform: 'none' }}>
+            <Button variant="contained" 
+              sx={{
+                 textTransform: 'none', 
+                  padding: '12px 24px',  
+                  fontSize: '1.1rem',   
+                  minWidth: '160px',          
+                  minHeight: '50px',          
+                }}
+            >
               {textConstants.ONBOARDING_PAGE_TWO_RETURN_BTN_TEXT}
             </Button>
           </a>
         </Box>
-      </>
+      </Grid>
     );
   }
   return (
     <form onSubmit={handleSubmit}>
-      <Typography className={classes.formTitle}>
-        Onboarding Form - Step 2
-      </Typography>
       <Box className={classes.formContainer}>
         <TextField
           label="Website"
@@ -206,17 +250,7 @@ const OrganizationOnboardingForm = (props) => {
           fullWidth
         />
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={loading}
-          loading={loading}
-
-        >
-          {/* Complete Onboarding */}
-          Next
-        </Button>
+        
         {loading && <p>Wait, you will be redirected soon.</p>}
         <Box height={40} />
         {/* Snackbar for success message */}
@@ -249,6 +283,16 @@ const OrganizationOnboardingForm = (props) => {
             {errorMessage}
           </Alert>
         </Snackbar>
+      </Box>
+      <Box className={classes.buttonContainer}>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={loading}
+          className={classes.button}
+        >
+          Next
+        </Button>
       </Box>
     </form>
   );
