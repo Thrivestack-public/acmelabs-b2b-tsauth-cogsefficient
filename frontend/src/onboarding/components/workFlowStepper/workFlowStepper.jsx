@@ -404,12 +404,6 @@ function workFlowStepper(props) {
 
   const [modalUser, setModalUser] = useState('');
 
-
-  const closeModel = () => {
-    setIsPrevModalOpen(false);
-    setModalUser('');
-  };
-
   const openModal = (user) => {
     setModalUser(user);
     setIsPrevModalOpen(true);
