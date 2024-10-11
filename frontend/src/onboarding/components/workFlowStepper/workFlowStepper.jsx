@@ -14,7 +14,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import JsonViewerModal from './modalComponent';
 import PreviewModal from './previewModalComponent';
-import { fetchData as fetchTenantData, fetchValidateAuth, getEnrichmentData } from '../../../Api/viewSharedData';
+import { fetchData as fetchTenantData, fetchValidateAuth, getEnrichmentData, fetchAckData } from '../../../Api/viewSharedData';
 import { useLocation } from 'react-router-dom';
 import './workFlowStepper.css';
 
@@ -196,7 +196,7 @@ function workFlowStepper(props) {
     'srcLeftStep6': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep8',
-      label: viewSharedData(getTenantData, 2, 5, "Tenant Data"),
+      label: viewSharedData(getTenantData, 2, 5, "Tenant Request Data"),
     },
     'srcLeftStep11': {
       ...leftToRightArrowRelation,
@@ -244,7 +244,8 @@ function workFlowStepper(props) {
     'srcRightStep9': {
       ...rightToLeftArrowRelation,
       targetId: 'dstLeftStep7',
-      label: <div>{acknowledgeData}</div>,
+      label: viewSharedData(getAcknowledgeData, 2, 5, "Acknowledge Data"),
+      // label: <div>{acknowledgeData}</div>,
     },
   };
 
@@ -285,6 +286,9 @@ function workFlowStepper(props) {
       }
       const tenantApiResponse = await fetchTenantData(workflowRuntimeId, 'tenant_creation');
       localStorage.setItem("tenantData", JSON.stringify(tenantApiResponse));
+
+      const acknowledgeApiResponse = await fetchAckData(workflowRuntimeId, 'tenant_acknowledgement');
+      localStorage.setItem("tenant_acknowledgement", JSON.stringify(acknowledgeApiResponse));
     };
 
     fetchData();
@@ -305,6 +309,20 @@ function workFlowStepper(props) {
     setModalDataArr([{
       JsonData: apiResponse,
       JsonLabel: "Tenant Data"
+    }])
+
+  }
+
+  async function getAcknowledgeData() {
+    setModalDesc('SHARED_DATA_MODAL_DESC_ACKNOWLEDGE')
+    setModalInfo('SHARED_DATA_MODAL_INFO_ACKNOWLEDGE');
+    setIsModalOpen(true);
+    setModalLink('ACKNOWLEDGE_DOCS_LINK')
+    const apiResponse = JSON.parse(localStorage.getItem("tenant_acknowledgement"));
+
+    setModalDataArr([{
+      JsonData: apiResponse,
+      JsonLabel: "Acknowledge Data"
     }])
 
   }

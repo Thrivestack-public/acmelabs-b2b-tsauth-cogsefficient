@@ -13,6 +13,18 @@ import WorkFlowHeadingFinal from '../workFlowHeading/workflowHeadingFinal'
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import zIndex from "@mui/material/styles/zIndex";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Defs,
+  LinearGradient,
+  Stop
+} from "recharts";
 
 function boardingSectionNew() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -41,6 +53,16 @@ function boardingSectionNew() {
     const path = returnUrlParam.substring(domainIndex);
     setReturnUrl(returnUrlParam);
   }
+
+
+  const data = [
+    { name: "Jan", value1: 200000, value2: 150000 },
+    { name: "Feb", value1: 220000, value2: 170000 },
+    { name: "Mar", value1: 180000, value2: 140000 },
+    { name: "Apr", value1: 250000, value2: 160000 },
+    { name: "May", value1: 230000, value2: 180000 },
+    { name: "Jun", value1: 270000, value2: 200000 },
+  ];
 
   return (
     <Box sx={{ flexGrow: 1, height: '100vh', position: 'relative' }}>
@@ -152,7 +174,7 @@ function boardingSectionNew() {
 
             </Grid>
           ) : (
-            // MOCK WEBSITE PART
+// MOCK WEBSITE PART
             <Box
               sx={{
                 display: 'flex',
@@ -182,13 +204,13 @@ function boardingSectionNew() {
                   <Divider />
                   <ListItem>
                     <ListItemIcon sx={{ justifyContent: 'center', marginBottom: '5vh', marginTop: '3vh' }}>
-                      <HomeIcon sx={{ color: '#B0B0B0' }} /> {/* Disabled color */}
+                      <HomeIcon sx={{ color: '#B0B0B0' }} />
                     </ListItemIcon>
                   </ListItem>
                   {[1, 2, 3, 4].map((item) => (
                     <ListItem key={item}>
                       <ListItemIcon sx={{ justifyContent: 'center', marginBottom: '5vh' }}>
-                        <PersonIcon sx={{ color: '#B0B0B0' }} /> {/* Disabled color */}
+                        <PersonIcon sx={{ color: '#B0B0B0' }} />
                       </ListItemIcon>
                     </ListItem>
                   ))}
@@ -245,90 +267,51 @@ function boardingSectionNew() {
                       </Grid>
                     </Paper>
                   </Grid>
+
                   <Grid item xs={12}>
                     <Paper
                       elevation={3}
-                      sx={{ padding: 3, borderRadius: '10px', backgroundColor: '#FFFFFF', width: '90%', margin: '0 auto' }}
+                      sx={{
+                        padding: 3,
+                        borderRadius: '10px',
+                        backgroundColor: '#FFFFFF',
+                        width: '90%',
+                        margin: '0 auto'
+                      }}
                     >
                       <Typography variant="h6" sx={{ fontWeight: 600, color: '#3C3E44' }}>
                         Usage
                       </Typography>
-                      <Box sx={{ height: 200, marginTop: 2, position: 'relative' }}>
-                        <Box
-                          sx={{
-                            height: '100%',
-                            position: 'absolute',
-                            width: '100%',
-                            borderBottom: '2px solid #EDEFF1',
-                            borderLeft: '2px solid #EDEFF1',
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            height: '2px',
-                            width: '60%',
-                            background: 'rgba(33, 150, 243, 1)',
-                            left: '10%',
-                            top: '30%',
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            height: '2px',
-                            width: '40%',
-                            background: 'rgba(33, 150, 243, 1)',
-                            left: '50%',
-                            top: '70%',
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            height: '2px',
-                            width: '20%',
-                            background: 'rgba(33, 150, 243, 1)',
-                            left: '80%',
-                            top: '50%',
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            width: '8px',
-                            height: '8px',
-                            borderRadius: '50%',
-                            background: 'rgba(33, 150, 243, 1)',
-                            left: '9%',
-                            top: '28%',
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            width: '8px',
-                            height: '8px',
-                            borderRadius: '50%',
-                            background: 'rgba(33, 150, 243, 1)',
-                            left: '49%',
-                            top: '68%',
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            width: '8px',
-                            height: '8px',
-                            borderRadius: '50%',
-                            background: 'rgba(33, 150, 243, 1)',
-                            left: '79%',
-                            top: '48%',
-                          }}
-                        />
-                      </Box>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                          <defs>
+                            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis tickFormatter={(value) => `$${value / 1000}k`} />
+                          <Line
+                            type="monotone"
+                            dataKey="value1"
+                            stroke="#8884d8"
+                            strokeWidth={3}
+                            fill="url(#colorUv)"
+                            fillOpacity={1}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="value2"
+                            stroke="#888888"
+                            strokeDasharray="5 5"
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
                     </Paper>
                   </Grid>
+
                 </Grid>
               </Box>
             </Box>

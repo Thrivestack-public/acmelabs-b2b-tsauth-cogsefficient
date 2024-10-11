@@ -131,7 +131,7 @@ function workFlowHeading() {
                 <EmojiObjectsIcon />
               </Box>
               <Typography>
-                With onboarding events, you can track user success and drop-off in Thrivestack’s activation reports in PLG analytics.
+                With onboarding events, you can track user success and drop-off in ThriveStack’s activation reports in PLG analytics.
               </Typography>
             </Box>
           </Grid>

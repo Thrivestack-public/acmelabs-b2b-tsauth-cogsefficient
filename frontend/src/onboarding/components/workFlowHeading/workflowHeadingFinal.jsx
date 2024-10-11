@@ -49,11 +49,11 @@ function workFlowHeadingFinal() {
             <div style={{ marginBottom: '20px' }}>
                 <div style={{ color: '#0A58CA', fontSize: '16px', fontWeight: 'bold', marginBottom: '1px'}}>NEXT STEPS</div>
                 <h2 style={{ color: '#333333', fontSize: '20px', marginBottom: '4px', marginTop: '4px' }}>
-                    Checkout data available for Analytics and Drive on Thrivestack
+                    Checkout data available for Analytics and Drive on ThriveStack
                 </h2>
 
                 <ol style={{ marginLeft: '0px', marginTop: '1px', fontSize: '14px', color: '#333' }}>
-                    <li>Sign up or log in with your sample app ID on Thrivestack</li>
+                    <li>Sign up or log in with your sample app ID on ThriveStack</li>
                     <li>Click demo or In the top Nav, choose product Acme</li>
                     <li>Checkout data available under Analytics and Drive</li>
                 </ol>

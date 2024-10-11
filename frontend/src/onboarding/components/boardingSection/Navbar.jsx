@@ -47,7 +47,7 @@ function Navbar({page}) {
                             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.25)',
                         }}
                     >
-                        Thrivestack
+                        ThriveStack
                     </Box>
                     <Box
                         sx={{

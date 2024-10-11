@@ -14,6 +14,16 @@ async function fetchData(workflowRuntimeId, stepId) {
         return { error: error.message };
     }
 }
+async function fetchAckData(workflowRuntimeId, stepId) {
+    const url = `${sharedDataApiBase}${sharedDataApiEndpoint}?workflowRuntimeId=${workflowRuntimeId}&stepId=${stepId}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data; 
+    } catch (error) {
+        return { error: error.message };
+    }
+}
 
 async function fetchValidateAuth(authOTP) {
     const url = `${validateAuthApiBase}${validateAuthApiBaseEndpoint}?authOTP=${authOTP}`;
@@ -86,8 +96,6 @@ async function getEnrichmentData() {
 
         const email = (tokenJson)["emailId"]
 
-        console.log("tokenJSON & email", tokenJson, email)
-
         const params = {
             productId: 'f01334c6-f726-11ee-bd2a-e60358d08e04',
             emailId: email
@@ -110,7 +118,6 @@ async function getEnrichmentData() {
 
             const data = await response.json()
             localStorage.setItem("enrichmentData", JSON.stringify(data))
-            console.log(localStorage.getItem("enrichmentData"))
             return(localStorage.getItem("enrichmentData"))
             
 
@@ -125,4 +132,4 @@ async function getEnrichmentData() {
 
 }
 
-export { fetchData, fetchValidateAuth, getManagementToken, getEnrichmentData };
+export { fetchData, fetchValidateAuth, getManagementToken, getEnrichmentData, fetchAckData };
