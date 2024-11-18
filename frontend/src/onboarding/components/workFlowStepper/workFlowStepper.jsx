@@ -196,7 +196,8 @@ function workFlowStepper(props) {
     'srcLeftStep6': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep8',
-      label: viewSharedData(getTenantData, 2, 5, "Tenant Request Data"),
+      // label: viewSharedData(getTenantData, 2, 5, "Tenant Data"),
+      label: <div>{viewSharedData(()=> getTenantData(), 2, 10, "Tenant Data")}</div>,
     },
     'srcLeftStep11': {
       ...leftToRightArrowRelation,
@@ -244,8 +245,8 @@ function workFlowStepper(props) {
     'srcRightStep9': {
       ...rightToLeftArrowRelation,
       targetId: 'dstLeftStep7',
-      label: viewSharedData(getAcknowledgeData, 2, 5, "Acknowledge Data"),
-      // label: <div>{acknowledgeData}</div>,
+      // label: viewSharedData(getAcknowledgeData, 2, 5, "Acknowledge Data"),
+      label: <div>{acknowledgeData}</div>,
     },
   };
 
