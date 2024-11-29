@@ -245,8 +245,8 @@ function workFlowStepper(props) {
     'srcRightStep9': {
       ...rightToLeftArrowRelation,
       targetId: 'dstLeftStep7',
-      // label: viewSharedData(getAcknowledgeData, 2, 5, "Acknowledge Data"),
-      label: <div>{acknowledgeData}</div>,
+      label: viewSharedData(getAcknowledgeData, 2, 10, "Acknowledge Data"),
+      // label: <div>{acknowledgeData}</div>,
     },
   };
 
