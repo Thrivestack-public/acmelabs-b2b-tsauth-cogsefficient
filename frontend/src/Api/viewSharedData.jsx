@@ -3,7 +3,31 @@ import { sharedDataApiBase, sharedDataApiEndpoint, validateAuthApiBase, validate
 
 import { MANAGEMENT_TOKEN_API_URL, ENRICHMENT_DATA_URL } from '../constants'
 
-// Function to fetch data using Axios
+async function fetchAccountData(workflowRuntimeId, stepId, authToken) {
+    const url = `${sharedDataApiBase}${sharedDataApiEndpoint}?workflowRuntimeId=${workflowRuntimeId}&stepId=${stepId}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+            },
+        })
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const result = await response.json();
+        return result
+
+        
+    } catch (error) {
+        return { error: error.message };
+    }
+}
+
 async function fetchData(workflowRuntimeId, stepId) {
     const url = `${sharedDataApiBase}${sharedDataApiEndpoint}?workflowRuntimeId=${workflowRuntimeId}&stepId=${stepId}`;
 
@@ -82,19 +106,25 @@ async function getEnrichmentData() {
 
     if (!localStorage.getItem("enrichmentData")) {
 
-        const token = await getManagementToken()
+        let mgmtToken = localStorage.getItem('TSManagementToken')
+
+        if(!mgmtToken){
+            mgmtToken = await getManagementToken()
+        }
+        
 
         const apiUrl = ENRICHMENT_DATA_URL
 
         const authToken = localStorage.getItem("firstAuthenticationData") || localStorage.getItem("lastAuthenticationData");
 
         if (!authToken){
+            console.log("AUTH...TOKEN...NOT IN ENRICHMENT")
             return null
         }
 
         const tokenJson = JSON.parse(authToken)
 
-        const email = (tokenJson)["emailId"]
+        const email = tokenJson.emailId;
 
         const params = {
             productId: 'f01334c6-f726-11ee-bd2a-e60358d08e04',
@@ -108,7 +138,7 @@ async function getEnrichmentData() {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${mgmtToken}`
                 }
             })
 
@@ -132,4 +162,4 @@ async function getEnrichmentData() {
 
 }
 
-export { fetchData, fetchValidateAuth, getManagementToken, getEnrichmentData, fetchAckData };
+export { fetchData, fetchValidateAuth, getManagementToken, getEnrichmentData, fetchAckData, fetchAccountData };

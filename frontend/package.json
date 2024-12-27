@@ -15,6 +15,7 @@
     "@mui/styles": "^5.4.4",
     "@stripe/react-stripe-js": "^1.4.1",
     "@stripe/stripe-js": "^1.16.0",
+    "@thrivestack/javascript-sdk": "^0.0.5",
     "antd": "^5.20.0",
     "aos": "^2.3.4",
     "autoprefixer": "^9.8.8",
@@ -26,6 +27,7 @@
     "emoji-mart": "^3.0.1",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
+    "node-fetch": "^3.3.2",
     "postcss": "^7.0.39",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
@@ -45,6 +47,7 @@
     "recharts": "^2.12.7",
     "smooth-scroll-into-view-if-needed": "^2.0.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
+    "uuid": "^8.3.2",
     "workbox-background-sync": "^6.2.4",
     "workbox-broadcast-update": "^6.2.2",
     "workbox-cacheable-response": "^6.2.4",
@@ -59,6 +62,9 @@
     "workbox-streams": "^6.1.5"
   },
   "devDependencies": {
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",

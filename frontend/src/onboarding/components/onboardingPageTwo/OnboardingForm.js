@@ -121,9 +121,7 @@ const OrganizationOnboardingForm = (props) => {
         await localStorage.setItem("onboardingData", JSON.stringify(data));
         console.log("Data submitted successfully");
 
-        resetForm();
-        setShowSuccessMessage(true);
-        setPageStepCounter(2);
+        setShowSuccessMessage(true)
 
         localStorage.removeItem("userMetaData");
       } catch (error) {

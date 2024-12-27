@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   TextField, Button, Box,
@@ -40,7 +40,7 @@ const styles = (theme) => ({
 
 const OrganizationOnboardingForm = (props) => {
   const { classes } = props;
-  const { formData, setFormData, resetForm, onboardingMetaData, setPageStepCounter, setStepCompleted } =
+  const { formData, setFormData, resetForm, onboardingMetaData, setPageStepCounter, setStepCompleted, pageStepCounter } =
     useOnboardingFormData();
 
   const [errors, setErrors] = useState({});
@@ -48,7 +48,7 @@ const OrganizationOnboardingForm = (props) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false
   );
   const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); 
 
   const handleCloseErrorMessage = () => {
     setShowErrorMessage(false);
@@ -94,7 +94,7 @@ const OrganizationOnboardingForm = (props) => {
         await localStorage.setItem("onboardingData", JSON.stringify(data));
         console.log("Data submitted successfully");
 
-        resetForm();
+        // resetForm();
         setShowSuccessMessage(true);
         setPageStepCounter(2);
 
@@ -168,15 +168,16 @@ const OrganizationOnboardingForm = (props) => {
       </>
     );
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <Typography className={classes.formTitle}>
-        Onboarding Form - Step 2
+        Onboarding Form - Step 2345
       </Typography>
       <Box className={classes.formContainer}>
         <TextField
-          label="Website"
-          name="website"
+          label="Websitedfg"
+          name="websitezxc"
           type="url"
           value={formData.website}
           onChange={handleInputChange}

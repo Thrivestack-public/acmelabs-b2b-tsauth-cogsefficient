@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -14,9 +14,11 @@ import { jwtDecode } from 'jwt-decode';
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import JsonViewerModal from './modalComponent';
 import PreviewModal from './previewModalComponent';
-import { fetchData as fetchTenantData, fetchValidateAuth, getEnrichmentData, fetchAckData } from '../../../Api/viewSharedData';
+import { fetchData as fetchTenantData, fetchValidateAuth, getEnrichmentData, fetchAckData, fetchAccountData } from '../../../Api/viewSharedData';
 import { useLocation } from 'react-router-dom';
 import './workFlowStepper.css';
+import { v4 as uuidv4 } from 'uuid';
+import Cookies from "js-cookie";
 
 
 
@@ -30,12 +32,15 @@ function workFlowStepper(props) {
   const queryParams = new URLSearchParams(location.search);
   const workflowRuntimeId = queryParams.get('runtimeId') || localStorage.getItem("workflowRuntimeId");
   const authOTP = queryParams.get('authOTP');
+  const [apitriggerToken, setApitriggerToken] = useState('')
+  const [organizationId, setOrganizationId] = useState("");
+
 
   if (workflowRuntimeId && workflowRuntimeId !== "") {
     localStorage.setItem("workflowRuntimeId", workflowRuntimeId)
   }
 
-  const { pageStepCounter, stepCompleted, setCurrentPage, setPageStepCounter, setStepCompleted, setUserEmail } = useOnboardingFormData();
+  const { pageStepCounter, stepCompleted, setCurrentPage, setPageStepCounter, setStepCompleted, setUserEmail, formData } = useOnboardingFormData();
   if (isFinalPage) {
     setCurrentPage(3);
     setStepCompleted(11);
@@ -197,7 +202,7 @@ function workFlowStepper(props) {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep8',
       // label: viewSharedData(getTenantData, 2, 5, "Tenant Data"),
-      label: <div>{viewSharedData(()=> getTenantData(), 2, 10, "Tenant Data")}</div>,
+      label: <div>{viewSharedData(() => getTenantData(), 2, 10, "Tenant Data")}</div>,
     },
     'srcLeftStep11': {
       ...leftToRightArrowRelation,
@@ -267,11 +272,15 @@ function workFlowStepper(props) {
 
 
   useEffect(() => {
+
     const fetchData = async () => {
+      let tsAuthToken = ''
+
       if (isFirstPage) {
         if (authOTP) {
           const authApiResponse = await fetchValidateAuth(authOTP);
           const authApiResponseJson = authApiResponse.token ? jwtDecode(authApiResponse.token) : { "error": "No token found" };
+          tsAuthToken = authApiResponse.token
           localStorage.setItem("firstAuthenticationData", JSON.stringify(authApiResponseJson));
         }
       }
@@ -285,20 +294,19 @@ function workFlowStepper(props) {
           localStorage.setItem("lastAuthenticationData", JSON.stringify(authApiResponseJson));
         }
       }
-      const tenantApiResponse = await fetchTenantData(workflowRuntimeId, 'tenant_creation');
+      const accountApiResponse = await fetchAccountData(workflowRuntimeId, 'account_created', tsAuthToken);
+      localStorage.setItem("accountData", JSON.stringify(accountApiResponse));
+
+      const tenantApiResponse = await fetchTenantData(workflowRuntimeId, 'create_tenant');
       localStorage.setItem("tenantData", JSON.stringify(tenantApiResponse));
 
       const acknowledgeApiResponse = await fetchAckData(workflowRuntimeId, 'tenant_acknowledgement');
       localStorage.setItem("tenant_acknowledgement", JSON.stringify(acknowledgeApiResponse));
     };
 
-    fetchData();
+    fetchData()
   }, []);
 
-
-  useEffect(async () => {
-
-  }, []);
 
   async function getTenantData() {
     setModalDesc('SHARED_DATA_MODAL_DESC_TENANT')
@@ -331,14 +339,12 @@ function workFlowStepper(props) {
   // validateAuth
   async function getAuthenticationData(storageKey) {
     try {
-      console.log("getAuthenticated_invoked storageKey :", storageKey)
       setModalInfo('SHARED_DATA_MODAL_INFO_ONBOARDING_REDIRECT')
       setIsModalOpen(true);
       setModalDesc('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
       setModalLink('ONBOARDING_DOCS_LINK')
       let apiResponse = {};
       const ls = localStorage.getItem(storageKey)
-      console.log("LocalStorage Auth DATA: ", ls)
       if (ls) {
         apiResponse = JSON.parse(ls)
       }
@@ -396,9 +402,12 @@ function workFlowStepper(props) {
   }
 
   useEffect(() => {
+    console.log("Start enrichment")
     async function fetchAndSaveEnrichmentData() {
       try {
+        console.log("Start enrichment 1")
         const data = await getEnrichmentData();
+        console.log("Start enrichment done", data)
         if (data) {
           const jsonData = JSON.parse(data);
           if (jsonData) {
@@ -418,6 +427,45 @@ function workFlowStepper(props) {
   }, []);
 
 
+  useEffect(() => {
+
+    const fetchApiTriggerToken = async () => {
+      const url = "https://api.dev.app.thrivestack.ai/v1/GetTSDefaultManagementToken"
+
+      const requestData = {
+        product_id: "f01334c6-f726-11ee-bd2a-e60358d08e04",
+        environment_id: "980b098a-f727-11ee-9452-c6b0e2ef0e53"
+      }
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData)
+        })
+
+        if (!response.ok) {
+          throw new Error("Network response not ok");
+        }
+
+        const data = await response.json();
+        setApitriggerToken(data.api_trigger_token);
+      }
+      catch (error) {
+        console.log("ERROR: ", error)
+      }
+
+    }
+
+    fetchApiTriggerToken()
+
+
+
+
+  }, [])
+
 
 
 
@@ -428,6 +476,101 @@ function workFlowStepper(props) {
     setIsPrevModalOpen(true);
   };
 
+  useEffect(() => {
+
+    const generateOrganizationId = () => {
+      const newOrganizationId = uuidv4();
+      setOrganizationId(newOrganizationId);
+    };
+    
+    generateOrganizationId()
+
+    const authToken = localStorage.getItem('firstAuthenticationData')
+    
+    let decodedToken = ''
+    if(authToken){
+    decodedToken = JSON.parse(authToken);
+    }
+
+    const sendTelemetry = async () => {
+
+      const getCurrentTimestamp = () => {
+        const now = new Date();
+        return now.toISOString()
+      };
+
+      const url = "https://api.dev.app.thrivestack.ai/api/track";
+
+      let properties_ob1 = {}
+      let properties_ob2 = {}
+
+      if (pageStepCounter === 2) {
+
+        properties_ob1 = {
+          "Organization_Name": formData.orgName,
+          "Organization_Type": formData.orgType,
+          "Industry": formData.industry
+        }
+      }
+
+      if (pageStepCounter === 3) {
+        
+        properties_ob2 = {
+          "Website": formData.website,
+          "Contact_Name": formData.contactName,
+          "Contact_Email": formData.contactEmail,
+          "Phone_Number": formData.phone
+        }
+      }
+      const propertiesMap = {
+        2: properties_ob1,
+        3: properties_ob2
+      };
+
+      const telemetryData = [
+        {
+          "user_id": decodedToken.emailId,
+          "event_name": `OnboardingStep_${pageStepCounter}`,
+          "properties": propertiesMap[pageStepCounter] || {},
+          "context": {
+            "group_id": decodedToken.accountId,
+            "org_id": organizationId,
+          },
+          "timestamp": getCurrentTimestamp()
+        }
+      ]
+
+
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              `Bearer ${apitriggerToken}`,
+          },
+          body: JSON.stringify(telemetryData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Response:", result);
+      } catch (error) {
+        console.error("ERROR : ", error);
+      }
+
+    }
+
+    if (pageStepCounter === 2 || pageStepCounter === 3) {
+      sendTelemetry()
+    }
+
+
+  }, [pageStepCounter])
 
   useEffect(() => {
     const currentStepElement = document.getElementById(`step-${pageStepCounter}`);
