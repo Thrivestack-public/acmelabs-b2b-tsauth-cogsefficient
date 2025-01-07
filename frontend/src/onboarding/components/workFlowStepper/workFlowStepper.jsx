@@ -430,7 +430,7 @@ function workFlowStepper(props) {
   useEffect(() => {
 
     const fetchApiTriggerToken = async () => {
-      const url = "https://api.dev.app.thrivestack.ai/v1/GetTSDefaultManagementToken"
+      const url = "https://api.app.thrivestack.ai/v1/GetTSDefaultManagementToken"
 
       const requestData = {
         product_id: "f01334c6-f726-11ee-bd2a-e60358d08e04",
@@ -499,7 +499,7 @@ function workFlowStepper(props) {
         return now.toISOString()
       };
 
-      const url = "https://api.dev.app.thrivestack.ai/api/track";
+      const url = "https://api.app.thrivestack.ai/api/track";
 
       let properties_ob1 = {}
       let properties_ob2 = {}
