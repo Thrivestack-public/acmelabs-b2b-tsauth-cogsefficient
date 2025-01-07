@@ -196,7 +196,7 @@ function workFlowStepper(props) {
     'srcLeftStep24': {
       ...leftToRightArrowRelation,
       targetId: 'dstRightStep2',
-      label: viewSharedData(() => getAuthenticationData("firstAuthenticationData"), 5, 3, "View Authenticated Data")
+      label: viewSharedData(() => getAuthenticationData("lastAuthenticationData","firstAuthenticationData"), 5, 3, "View Authenticated Data")
     },
     'srcLeftStep6': {
       ...leftToRightArrowRelation,
@@ -337,14 +337,14 @@ function workFlowStepper(props) {
   }
 
   // validateAuth
-  async function getAuthenticationData(storageKey) {
+  async function getAuthenticationData(storageKey1, storageKey2) {
     try {
       setModalInfo('SHARED_DATA_MODAL_INFO_ONBOARDING_REDIRECT')
       setIsModalOpen(true);
       setModalDesc('SHARED_DATA_MODAL_DESC_ONBOARDING_REDIRECT')
       setModalLink('ONBOARDING_DOCS_LINK')
       let apiResponse = {};
-      const ls = localStorage.getItem(storageKey)
+      const ls = localStorage.getItem(storageKey1) || localStorage.getItem(storageKey2)
       if (ls) {
         apiResponse = JSON.parse(ls)
       }
@@ -460,10 +460,6 @@ function workFlowStepper(props) {
     }
 
     fetchApiTriggerToken()
-
-
-
-
   }, [])
 
 
@@ -529,7 +525,7 @@ function workFlowStepper(props) {
 
       const telemetryData = [
         {
-          "user_id": decodedToken.emailId,
+          "user_id": decodedToken.thriveUserId,
           "event_name": `OnboardingStep_${pageStepCounter}`,
           "properties": propertiesMap[pageStepCounter] || {},
           "context": {
