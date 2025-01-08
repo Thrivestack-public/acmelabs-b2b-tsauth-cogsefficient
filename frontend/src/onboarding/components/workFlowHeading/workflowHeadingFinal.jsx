@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Button, Typography, Box } from '@mui/material';
 import { textConstants } from "../../../textConstants";
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import InvitationModal from 'ts-invite-modal'
 
-function workFlowHeadingFinal() {
+function WorkFlowHeadingFinal() {
 
     const { userEmail } = useOnboardingFormData();
+    const [ openModal, setOpenModal ] = useState(false)
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', margin: '1px' }}>
@@ -47,7 +49,7 @@ function workFlowHeadingFinal() {
 
             {/* Section 2: Checkout Data Available */}
             <div style={{ marginBottom: '20px' }}>
-                <div style={{ color: '#0A58CA', fontSize: '16px', fontWeight: 'bold', marginBottom: '1px'}}>NEXT STEPS</div>
+                <div style={{ color: '#0A58CA', fontSize: '16px', fontWeight: 'bold', marginBottom: '1px' }}>NEXT STEPS</div>
                 <h2 style={{ color: '#333333', fontSize: '20px', marginBottom: '4px', marginTop: '4px' }}>
                     Checkout data available for Analytics and Drive on ThriveStack
                 </h2>
@@ -70,7 +72,7 @@ function workFlowHeadingFinal() {
                 cursor: 'pointer',
                 marginBottom: '5vh'
             }}
-            onClick={() => window.open('https://app.thrivestack.ai', '_blank')}
+                onClick={() => window.open('https://app.thrivestack.ai', '_blank')}
             >
                 Sign up
             </button><br />
@@ -88,9 +90,9 @@ function workFlowHeadingFinal() {
             <Box display="flex" alignItems="center" justifyContent="space-between" paddingBottom="0vh" marginBottom="0vh">
                 <Typography fontSize={"14px"}>
                     {`( Template: `}
-                    <a 
+                    <a
                         href="https://docs.app.thrivestack.ai/getting-started/self-serve/integrate/#22-template-2-cogs-efficient-b2b-saas"
-                        target="_blank" 
+                        target="_blank"
                     >
                         COGS Efficient
                     </a>
@@ -111,8 +113,13 @@ function workFlowHeadingFinal() {
                 </Button>
             </Box>
             <div className='card-subHeader' style={{ marginTop: '20px' }}>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}{` `}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient" target='_blank'>Github repo</a>{``}</div> <br />
+            <InvitationModal
+                isModalVisible={openModal}
+                setIsModalVisible={setOpenModal}
+                workflowId='fghj'
+            />
         </div>
     )
 }
 
-export default workFlowHeadingFinal;
+export default WorkFlowHeadingFinal;

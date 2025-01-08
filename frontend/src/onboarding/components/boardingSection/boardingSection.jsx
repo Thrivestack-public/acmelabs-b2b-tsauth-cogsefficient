@@ -26,7 +26,7 @@ import {
   Stop
 } from "recharts";
 
-function boardingSectionNew() {
+function BoardingSectionNew() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const togglePanel = () => {
@@ -378,6 +378,6 @@ function boardingSectionNew() {
   );
 }
 
-boardingSectionNew.propTypes = {};
+BoardingSectionNew.propTypes = {};
 
-export default boardingSectionNew;
+export default BoardingSectionNew;

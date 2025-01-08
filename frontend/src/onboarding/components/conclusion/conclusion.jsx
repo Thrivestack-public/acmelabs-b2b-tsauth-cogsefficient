@@ -7,7 +7,7 @@ import { textConstants } from '../../../textConstants';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import { useHistory } from 'react-router-dom';
-function conclusion() {
+function Conclusion() {
 
     const { userEmail } = useOnboardingFormData();
     const { width, height } = useWindowSize();
@@ -117,4 +117,4 @@ function conclusion() {
     )
 }
 
-export default conclusion
+export default Conclusion
