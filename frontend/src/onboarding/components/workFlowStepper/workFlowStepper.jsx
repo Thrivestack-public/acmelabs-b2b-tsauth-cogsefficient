@@ -526,7 +526,7 @@ function workFlowStepper(props) {
       const telemetryData = [
         {
           "user_id": decodedToken.thriveUserId,
-          "event_name": `OnboardingStep_${pageStepCounter}`,
+          "event_name": `OnboardingStep_${pageStepCounter - 1}`,
           "properties": propertiesMap[pageStepCounter] || {},
           "context": {
             "group_id": decodedToken.accountId,
