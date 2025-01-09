@@ -4,10 +4,9 @@ import './conclusion.css';
 import { Box, Card, Grid, Button } from '@mui/material';
 import { ArcherContainer, ArcherElement } from "react-archer";
 import { textConstants } from '../../../textConstants';
-import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import { useHistory } from 'react-router-dom';
-function conclusion() {
+function Conclusion() {
 
     const { userEmail } = useOnboardingFormData();
     const { width, height } = useWindowSize();
@@ -27,31 +26,6 @@ function conclusion() {
         },
     }
 
-    const [showGratification, setShowGratification] = useState(true);
-
-    useEffect(() => {
-        // Set a timeout to change showGratification to false after 5 seconds
-        const timer = setTimeout(() => {
-            setShowGratification(false);
-        }, 5000);
-
-        // Cleanup the timer if the component unmounts before the timer completes
-        return () => clearTimeout(timer);
-    }, []);
-
-    useEffect(() => {
-        // Function to handle click anywhere on the UI
-        const handleClick = () => {
-            setShowGratification(false);
-        };
-
-        // Add event listener for clicks
-        document.addEventListener('click', handleClick);
-
-        // Cleanup the event listener on component unmount
-        return () => document.removeEventListener('click', handleClick);
-    }, []);
-
     return (
         <div container className='conclusion-heading'>
 
@@ -68,9 +42,6 @@ function conclusion() {
                 >
                     {textConstants.WORKFLOW_PAGE_BANNER_RIGHT}
                 </div>
-                {showGratification && (
-                    <Confetti id='confetti-test' style={{ marginLeft: '45%' }} width={width * 0.55} />
-                )}
 
                 <div className='card-header' style={{ fontSize: '5vh' }}>Congratulations!</div> <br />
                 <div className='card-subHeader'>{textConstants.CONCLUSION_PAGE_VERIFY_DESC}</div> <br />
@@ -117,4 +88,4 @@ function conclusion() {
     )
 }
 
-export default conclusion
+export default Conclusion

@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Button, Typography, Box } from '@mui/material';
 import { textConstants } from "../../../textConstants";
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+// import InvitationModal from 'ts-invite-modal'
 
-function workFlowHeadingFinal() {
+function WorkFlowHeadingFinal() {
 
     const { userEmail } = useOnboardingFormData();
+    const [ openModal, setOpenModal ] = useState(false)
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', margin: '1px' }}>
@@ -111,8 +113,13 @@ function workFlowHeadingFinal() {
                 </Button>
             </Box>
             <div className='card-subHeader' style={{ marginTop: '20px' }}>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}{` `}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient" target='_blank'>Github repo</a>{``}</div> <br />
+            {/* <InvitationModal
+                isModalVisible={openModal}
+                setIsModalVisible={setOpenModal}
+                workflowId='fgh'
+                /> */}
         </div>
     )
 }
 
-export default workFlowHeadingFinal;
+export default WorkFlowHeadingFinal;

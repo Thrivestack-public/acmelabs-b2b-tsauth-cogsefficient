@@ -23,7 +23,7 @@ import Cookies from "js-cookie";
 
 
 
-function workFlowStepper(props) {
+function WorkFlowStepper(props) {
   const stepId = "";
   const location = useLocation();
   const currentPath = location.pathname;
@@ -1272,4 +1272,4 @@ function workFlowStepper(props) {
   )
 }
 
-export default workFlowStepper
+export default WorkFlowStepper
