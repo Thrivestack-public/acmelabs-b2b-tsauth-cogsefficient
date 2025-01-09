@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Grid, Button, Typography, Box } from '@mui/material';
+import { Button, Typography, Box } from '@mui/material';
 import { textConstants } from "../../../textConstants";
 import { useOnboardingFormData } from "../onboardingFormDataContext/onboardingFormDataContext";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-// import InvitationModal from 'ts-invite-modal'
+import InvitationModal from 'ts-invite-modal'
 
 function WorkFlowHeadingFinal() {
 
@@ -113,11 +113,11 @@ function WorkFlowHeadingFinal() {
                 </Button>
             </Box>
             <div className='card-subHeader' style={{ marginTop: '20px' }}>{textConstants.CONCLUSION_PAGE_VERIFY_DESC_TWO}{` `}<a href="https://github.com/Thrivestack-public/acmelabs-b2b-tsauth-cogsefficient" target='_blank'>Github repo</a>{``}</div> <br />
-            {/* <InvitationModal
+            <InvitationModal
                 isModalVisible={openModal}
                 setIsModalVisible={setOpenModal}
                 workflowId='fgh'
-                /> */}
+                />
         </div>
     )
 }
